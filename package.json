@@ -1,6 +1,6 @@
 {
   "name": "@overtheairbrew/homebrew-ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "dev": "next dev",
     "postbuild": "tsc -p tsconfig.server.json",

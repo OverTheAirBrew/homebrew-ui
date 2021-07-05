@@ -32,3 +32,10 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+index.d.ts
+
+package
+*.tgz
+
+**/*.js

@@ -37,5 +37,3 @@ index.d.ts
 
 package
 *.tgz
-
-**/*.js

@@ -37,3 +37,14 @@ index.d.ts
 
 package
 *.tgz
+
+
+**/*.js
+**/*.js.map
+
+*.js
+
+!next-i18next.config.js
+!next.config.js
+
+locale-config.json

@@ -1,4 +1,7 @@
+import { appWithTranslation } from 'next-i18next';
 import AppLayout from '../components/layout';
+const nextI18NextConfig = require('../next-i18next.config');
+
 
 function OtaApp({Component, pageProps}: {Component: any, pageProps: any}) {
   // return <Component {...pageProps} />
@@ -18,4 +21,4 @@ function OtaApp({Component, pageProps}: {Component: any, pageProps: any}) {
   )
 }
 
-export default OtaApp
+export default appWithTranslation(OtaApp, nextI18NextConfig)

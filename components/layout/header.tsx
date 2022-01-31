@@ -1,14 +1,14 @@
+import { Actions } from '@paljs/ui/Actions';
+import { breakpointDown } from '@paljs/ui/breakpoints';
+import ContextMenu from '@paljs/ui/ContextMenu';
+import { LayoutHeader } from '@paljs/ui/Layout';
+import User from '@paljs/ui/User';
+import { useRouter } from 'next/dist/client/router';
+import Link from 'next/link';
 import { FC } from 'react';
 import styled, { css } from 'styled-components';
 
-import { LayoutHeader } from '@paljs/ui/Layout';
-import { breakpointDown } from '@paljs/ui/breakpoints';
-import { Actions } from '@paljs/ui/Actions';
-import User from '@paljs/ui/User';
-import ContextMenu from '@paljs/ui/ContextMenu';
 
-import Link from 'next/link';
-import { useRouter } from 'next/dist/client/router';
 
 const HeaderStyle = styled.div`
   display: flex;
@@ -47,7 +47,7 @@ const GithubLogo = styled.svg`
   `}
 `;
 
-const Header: FC<{ breweryName: string }> = (props) => {
+const Header: FC<{ breweryName: string, toggleSidebar:() => void }> = (props) => {
   const router = useRouter();
 
   return (
@@ -56,6 +56,12 @@ const Header: FC<{ breweryName: string }> = (props) => {
         <Actions
           size="Medium"
           actions={[
+            {
+              icon: {name: 'menu-2-outline'},
+              url: {
+                onClick: props.toggleSidebar
+              }
+            },
             {
               content: (
                 <Link href="/">

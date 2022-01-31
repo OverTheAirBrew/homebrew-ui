@@ -18,6 +18,8 @@ export default async function request(
 
     const fullUrl = `${url?.replace('/internal-api', '')}`;
 
+    console.log(fullUrl);
+
     switch (req.method?.toUpperCase()) {
       case 'GET':
         response = await gateway.get(fullUrl, {

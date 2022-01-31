@@ -1,5 +1,6 @@
+const { i18n } = require('./next-i18next.config');
+
 module.exports = {
-  reactStrictMode: true,
   async rewrites() {
     return [
       {
@@ -8,4 +9,5 @@ module.exports = {
       },
     ];
   },
+  i18n,
 };

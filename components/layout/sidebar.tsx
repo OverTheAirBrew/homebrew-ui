@@ -1,15 +1,16 @@
-import { Menu } from '@paljs/ui/Menu';
-import { SidebarBody, Sidebar as PalSidebar } from '@paljs/ui/Sidebar';
-import { FC } from 'react';
-import Link from 'next/link';
 import { MenuItemType } from '@paljs/ui';
+import { Menu } from '@paljs/ui/Menu';
+import { Sidebar as PalSidebar, SidebarBody } from '@paljs/ui/Sidebar';
+import Link from 'next/link';
+import { FC } from 'react';
 
-interface ISidearProps {
+interface ISideBarProps {
   items: MenuItemType[];
   currentPath: string;
+  toggleSidebar: () => void;
 }
 
-const Sidebar: FC<ISidearProps> = (props) => {
+const Sidebar: FC<ISideBarProps> = (props) => {
   return (
     <PalSidebar
       property="start"
@@ -24,6 +25,7 @@ const Sidebar: FC<ISidearProps> = (props) => {
           items={props.items}
           currentPath={props.currentPath}
           Link={Link}
+          toggleSidebar={() => props.toggleSidebar()}
         />
       </SidebarBody>
     </PalSidebar>

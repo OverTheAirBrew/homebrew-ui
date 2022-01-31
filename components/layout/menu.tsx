@@ -21,18 +21,18 @@ export const menu: MenuItemType[] = [
   },
   {
     title: 'Sensors',
-    icon: { name: 'home' },
-    link: { href: '/equipment/sensrs' },
+    icon: { name: 'thermometer-outline' },
+    link: { href: '/equipment/sensors' },
   },
   {
     title: 'Heaters',
     icon: { name: 'home' },
     link: { href: '/equipment/heaters' },
   },
-  { title: 'Settings', group: true },
-  {
-    title: 'Plugins',
-    icon: { name: 'code-download-outline' },
-    link: { href: '/settings/plugins' },
-  },
+  // { title: 'Settings', group: true },
+  // {
+  //   title: 'Plugins',
+  //   icon: { name: 'code-download-outline' },
+  //   link: { href: '/settings/plugins' },
+  // },
 ];

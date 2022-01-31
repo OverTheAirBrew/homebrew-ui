@@ -6,7 +6,7 @@ export type Record<K extends keyof any, T> = {
 
 class GatewaySdk extends BaseSdk {
   constructor() {
-    super('http://localhost:9090/api');
+    super('http://localhost:9090');
   }
 }
 

@@ -1,1 +1,14 @@
-{}
+{
+  "interpolation": {
+    "is-required": "{{name}} is required",
+    "new-thing": "Create a new {{type}}",
+    "select-type-message": "Please select a {{type}} to configure"
+  },
+  "global": {
+    "name": "Name"
+  },
+  "sensors": {
+    "name": "Sensor",
+    "type": "Sensor Type"
+  }
+}

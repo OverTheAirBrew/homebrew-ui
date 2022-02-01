@@ -18,8 +18,6 @@ export default async function request(
 
     const fullUrl = `${url?.replace('/internal-api', '')}`;
 
-    console.log(fullUrl);
-
     switch (req.method?.toUpperCase()) {
       case 'GET':
         response = await gateway.get(fullUrl, {
@@ -30,8 +28,16 @@ export default async function request(
       case 'POST':
         response = await gateway.post(fullUrl, {
           headers: baseHeaders,
-          body: body,
+          body: JSON.stringify(body),
         });
+
+        break;
+
+      case 'PUT':
+        response = await gateway.put(fullUrl, {
+          headers: baseHeaders,
+          body: JSON.stringify(body),
+        })
 
         break;
 
@@ -42,7 +48,6 @@ export default async function request(
 
     return res.status(response.status).json(response.data);
   } catch (err: any) {
-    // console.log(err);
     return res
       .status(err.status || 500)
       .json({ status: err.status, message: err.message });

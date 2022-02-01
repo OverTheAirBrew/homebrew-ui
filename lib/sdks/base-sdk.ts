@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-unfetch';
-import { request } from 'http';
 
 export interface RequestOptions {
   headers?: Record<string, string>;
@@ -17,7 +16,6 @@ export abstract class BaseSdk {
     url: string,
     options?: RequestOptions,
   ): Promise<{ status: number; data: T; isSuccess: boolean }> {
-    console.log('AAA', url);
     return await this.makeRequest(url, { ...options, method: 'GET' });
   }
 
@@ -48,9 +46,6 @@ export abstract class BaseSdk {
   ): Promise<{ status: number; data: any; isSuccess: boolean }> {
     this.validateUrl(url);
     const absoluteUrl = this.createAbsoluteUrl(url);
-
-    console.log(absoluteUrl);
-
     const response = await fetch(absoluteUrl, options);
 
     try {
@@ -74,7 +69,7 @@ export abstract class BaseSdk {
       return await response.json();
     } else {
       // console.log('ERROR RESPONSE', await response.json());
-      return null;
+      return response.json();
     }
   }
 

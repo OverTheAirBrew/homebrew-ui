@@ -10,9 +10,8 @@ export default function withSettings(Component: any, keys: string[]) {
   class withSettings extends react.Component<{
     settings: { key: string; value: any }[];
   }> {
-    static async getInitialProps() {
-      console.log(`/settings?keys=${encodeURI(keys.join(','))}`);
 
+    static async getInitialProps() {
       const { data } = await internalSdk.get<{ key: string; value: string }[]>(
         `/settings?keys=${encodeURI(keys.join(','))}`,
         {},

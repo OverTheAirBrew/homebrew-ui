@@ -1,5 +1,5 @@
 import icons from '@paljs/icons';
-import { Menu, Sidebar, SidebarBody, SidebarRefObject } from '@paljs/ui';
+import { Menu, Sidebar, SidebarBody, SidebarRefObject, Toastr, ToastrRef } from '@paljs/ui';
 import {
   Layout, LayoutColumn, LayoutColumns, LayoutContainer,
   LayoutContent, LayoutFooter
@@ -8,6 +8,7 @@ import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
 import react, { Fragment, useEffect, useRef, useState } from 'react';
 import { DefaultTheme, ThemeProvider } from 'styled-components';
+import { toastrService } from '../../lib/toastr-service';
 import SimpleLayout from '../simple-layout';
 import themes from '../themes';
 import Header from './header';
@@ -46,6 +47,9 @@ const AppLayout: react.FC<{
     }
   }, []);
 
+  const toastRef = useRef<ToastrRef>(null);
+  toastrService.setRef(toastRef)
+
   return (
     <Fragment>
       <ThemeProvider theme={themes(theme, 'ltr')}>
@@ -53,6 +57,7 @@ const AppLayout: react.FC<{
           <SimpleLayout />
           <Layout evaIcons={icons} dir="ltr" className='main-content'>
             <Header breweryName={breweryName} toggleSidebar={() => sidebarRef.current?.toggle()} />
+            <Toastr ref={toastRef} />
             <LayoutContainer style={{paddingTop: '4.75rem'}}>
               <Sidebar
                 getState={getState}

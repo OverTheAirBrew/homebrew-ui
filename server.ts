@@ -19,6 +19,15 @@ Promise.resolve()
       );
     }
 
+    outputFile(
+      join(__dirname, 'locale-config.json'),
+      JSON.stringify({
+        locales: data.locales,
+        namespaces: data.namespaces,
+      }),
+      {},
+    );
+
     const app = next({ dev: IS_DEV });
     const handle = app.getRequestHandler();
 

@@ -10,7 +10,7 @@ module.exports = {
     backends: process.browser ? [localStorageBackend, i18nextHttpBackend] : [],
   },
   i18n: {
-    defaultLocale: 'en-gb',
+    defaultLocale: 'en',
     locales: localConfig.locales,
   },
   use: process.browser ? [chainedBackend] : [],

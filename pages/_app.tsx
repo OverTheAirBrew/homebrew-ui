@@ -15,7 +15,7 @@ function OtaApp({Component, pageProps}: {Component: any, pageProps: any}) {
   }
 
   return (
-    <AppLayout theme={theme?.value} breweryName={breweryName?.value}>
+    <AppLayout breweryName={breweryName?.value}>
       <Component  {...pageProps} />
     </AppLayout>
   )

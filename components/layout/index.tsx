@@ -6,27 +6,45 @@ import {
 } from '@paljs/ui/Layout';
 import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
-import react, { Fragment, useRef, useState } from 'react';
-import { ThemeProvider } from 'styled-components';
+import react, { Fragment, useEffect, useRef, useState } from 'react';
+import { DefaultTheme, ThemeProvider } from 'styled-components';
 import SimpleLayout from '../simple-layout';
 import themes from '../themes';
 import Header from './header';
 import { menu } from './menu';
 
-
+const getDefaultTheme = (): DefaultTheme['name'] => {
+  if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+    return localStorage.getItem('theme') as DefaultTheme['name'];
+  } else {
+    const hours = new Date().getHours();
+    return hours > 6 && hours < 19 ? 'default' : 'dark';
+  }
+};
 
 const AppLayout: react.FC<{
-  theme: 'dark' | 'cosmic' | 'corporate';
   breweryName: string;
-}> = ({ children, theme, breweryName }) => {
+}> = ({ children, breweryName }) => {
   const router = useRouter();
 
   const sidebarRef = useRef<SidebarRefObject>(null)
-  const [seeHeader, setSeeHeader] = useState(true)
+  const [theme, setTheme] = useState<DefaultTheme['name']>('default');
 
   const getState = (state?:'hidden' | 'visible' | 'compacted' | 'expanded') => {
-    setSeeHeader(state !== 'compacted')
+    // setSeeHeader(state !== 'compacted')
   }
+
+  const changeTheme = (newTheme: DefaultTheme['name']) => {
+    setTheme(newTheme);
+    typeof localStorage !== 'undefined' && localStorage.setItem('theme', newTheme);
+  };
+
+  useEffect(() => {
+    const localTheme = getDefaultTheme();
+    if (localTheme !== theme && theme === 'default') {
+      setTheme(localTheme);
+    }
+  }, []);
 
   return (
     <Fragment>
@@ -35,28 +53,28 @@ const AppLayout: react.FC<{
           <SimpleLayout />
           <Layout evaIcons={icons} dir="ltr" className='main-content'>
             <Header breweryName={breweryName} toggleSidebar={() => sidebarRef.current?.toggle()} />
-            <LayoutContainer id="modal-container">
-            <Sidebar
-              getState={getState}
-              ref={sidebarRef}
-              property="start"
-              containerFixed
-              responsive
-              className="menu-sidebar"
-            >
-              <SidebarBody>
-                <Menu
-                  nextJs
-                  className="sidebar-menu"
-                  items={menu}
-                  currentPath={router.pathname}
-                  Link={Link}
-                />
-              </SidebarBody>
-            </Sidebar>
+            <LayoutContainer style={{paddingTop: '4.75rem'}}>
+              <Sidebar
+                getState={getState}
+                ref={sidebarRef}
+                property="start"
+                containerFixed
+                responsive
+                className="menu-sidebar"
+              >
+                <SidebarBody>
+                  <Menu
+                    nextJs
+                    className="sidebar-menu"
+                    items={menu}
+                    currentPath={router.pathname}
+                    Link={Link}
+                  />
+                </SidebarBody>
+              </Sidebar>
               <LayoutContent>
                 <LayoutColumns>
-                  <LayoutColumn>
+                  <LayoutColumn className="main-content">
                     {children}
                   </LayoutColumn>
                 </LayoutColumns>

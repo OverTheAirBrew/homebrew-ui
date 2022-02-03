@@ -1,32 +1,42 @@
-import { InputGroup } from "@paljs/ui"
-import { useTranslation } from "next-i18next"
-import { FC } from "react"
-import { FieldValues, UseFormRegister } from "react-hook-form"
-import { ErrorMessage, isRequiredMessage } from "./utils"
+import { useTranslation } from 'next-i18next';
+import { FC } from 'react';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
+import { ErrorMessage, isRequiredMessage } from './utils';
 
 interface IInputProps {
-  fieldId:string;
+  fieldId: string;
   translationFieldName: string;
-  type: 'text' | 'number'
-  isRequired:boolean;
-  register: UseFormRegister<FieldValues>, 
-  errors: Record<string, any>
+  type: 'text' | 'number';
+  isRequired: boolean;
+  register: UseFormRegister<FieldValues>;
+  errors: Record<string, any>;
 }
 
-const Input: FC<IInputProps> = ({translationFieldName, fieldId, type, isRequired, register, errors}) => {
-  const {t} = useTranslation()
+const Input: FC<IInputProps> = ({
+  translationFieldName,
+  fieldId,
+  type,
+  isRequired,
+  register,
+  errors,
+}) => {
+  const { t } = useTranslation();
 
-  const requiredMessage = isRequired ? isRequiredMessage(t, translationFieldName) : false
+  const requiredMessage = isRequired
+    ? isRequiredMessage(t, translationFieldName)
+    : false;
 
   return (
-    <>
-      <label htmlFor={fieldId}>{t(translationFieldName)}</label>  
-      <InputGroup fullWidth>
-        <input type={type} {...register(fieldId, {required: requiredMessage})} />
-      </InputGroup>
+    <div className="form-group">
+      <label htmlFor={fieldId}>{t(translationFieldName)}</label>
+      <input
+        type={type}
+        className="form-control"
+        {...register(fieldId, { required: requiredMessage })}
+      />
       <ErrorMessage>{errors[fieldId]?.message}</ErrorMessage>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default Input
+export default Input;

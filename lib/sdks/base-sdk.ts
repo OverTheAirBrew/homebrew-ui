@@ -78,8 +78,6 @@ export abstract class BaseSdk {
   }
 
   private createAbsoluteUrl(url: string) {
-    console.log(url);
-
     if (url[0] === '/') url = url.substr(1);
     return `${this.baseUrl}/${url}`;
   }

@@ -23,21 +23,20 @@ import ModalFooter from '../../components/modal/footer';
 import ModalHeader from '../../components/modal/header';
 import Table from '../../components/table';
 import TableBody from '../../components/table/body';
-import TableBodyCell from '../../components/table/body-cell';
 import TableHead from '../../components/table/head';
 import HeaderCell from '../../components/table/header-cell';
 import TableRow from '../../components/table/row';
 import { internalSdk } from '../../lib/sdks/api-sdk';
 const localeConfig = require('../../locale-config.json');
 
-interface IEquipmentSensorsProps {
-  sensors: {
-    id: string;
-    name: string;
-    type_id: string;
-    config: any;
-  }[];
-  sensorTypes: {
+interface IEquipmentActorProps {
+  // sensors: {
+  //   id: string;
+  //   name: string;
+  //   type_id: string;
+  //   config: any;
+  // }[];
+  actorTypes: {
     type: 'string' | 'number' | 'select-box';
     properties: {
       type: string;
@@ -49,24 +48,20 @@ interface IEquipmentSensorsProps {
   }[];
 }
 
-const EquipmentSensors: FC<IEquipmentSensorsProps> = ({
-  sensors,
-  sensorTypes,
-}) => {
-  const modalId = 'testing-modal';
+const EquipmentActors: FC<IEquipmentActorProps> = ({ actorTypes }) => {
+  const modalId = 'add-edit-actor-modal';
 
   const { t } = useTranslation();
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
     reset,
   } = useForm();
 
   const [selectedSensorType, setSelectedSensorType] = useState<string>();
   const [editMode, setEditMode] = useState(false);
-  const [currentSensors, setCurrentSensors] = useState(sensors);
+  // const [currentSensors, setCurrentSensors] = useState(sensors);
 
   const onCreate = handleSubmit(async (data) => {
     const { id, name, sensorType, ...config } = data;
@@ -103,8 +98,8 @@ const EquipmentSensors: FC<IEquipmentSensorsProps> = ({
   });
 
   async function reloadSensors() {
-    const { data } = await internalSdk.get('/sensors', {});
-    setCurrentSensors(data as any);
+    const { data } = await internalSdk.get('/actors', {});
+    // setCurrentSensors(data as any);
   }
 
   async function onModalClose() {
@@ -125,9 +120,9 @@ const EquipmentSensors: FC<IEquipmentSensorsProps> = ({
       );
     }
 
-    const sensorType = sensorTypes.find((st) => st.type === selectedSensorType);
+    const actorType = actorTypes.find((st) => st.type === selectedSensorType);
 
-    return sensorType?.properties.map((stp) => {
+    return actorType?.properties.map((stp) => {
       return (
         <FormPart
           part={{
@@ -144,12 +139,14 @@ const EquipmentSensors: FC<IEquipmentSensorsProps> = ({
 
   return (
     <>
-      <PageHeader title="Sensors" />
+      <PageHeader title={t('actors.name')} />
       <PageContent>
         <Row>
           <Col>
             <Card>
-              <CardHeader title="Sensor List">
+              <CardHeader
+                title={t('interpolation.list', { name: t('actors.name') })}
+              >
                 <CardTool>
                   <IconButton
                     className="btn-tool"
@@ -165,12 +162,12 @@ const EquipmentSensors: FC<IEquipmentSensorsProps> = ({
                     <TableRow>
                       <HeaderCell>Name</HeaderCell>
                       <HeaderCell>Type</HeaderCell>
-                      <HeaderCell>Current Value</HeaderCell>
+                      <HeaderCell>State</HeaderCell>
                       <HeaderCell>Options</HeaderCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {currentSensors?.map((sensor) => {
+                    {/* {currentSensors?.map((sensor) => {
                       return (
                         <TableRow>
                           <TableBodyCell>{sensor.name}</TableBodyCell>
@@ -203,7 +200,7 @@ const EquipmentSensors: FC<IEquipmentSensorsProps> = ({
                           </TableBodyCell>
                         </TableRow>
                       );
-                    })}
+                    })} */}
                   </TableBody>
                 </Table>
               </CardBody>
@@ -237,7 +234,7 @@ const EquipmentSensors: FC<IEquipmentSensorsProps> = ({
                 id: 'sensorType',
                 name: 'sensors.type',
                 isRequired: true,
-                selectBoxValues: sensorTypes.map((st) => st.type),
+                selectBoxValues: actorTypes.map((st) => st.type),
                 type: 'select-box',
                 onChange: (e) => {
                   console.log(e);
@@ -269,18 +266,17 @@ const EquipmentSensors: FC<IEquipmentSensorsProps> = ({
 };
 
 export const getServerSideProps = async ({ locale }: { locale: string }) => {
-  const [{ data: sensorTypes }, { data: sensors }] = await Promise.all([
-    internalSdk.get('/sensor-types', {}),
-    internalSdk.get('/sensors', {}),
+  const [{ data: actorTypes }] = await Promise.all([
+    internalSdk.get('/actor-types', {}),
+    // internalSdk.get('/sensors', {}),
   ]);
 
   return {
     props: {
       ...(await serverSideTranslations(locale, localeConfig.namespaces)),
-      sensors,
-      sensorTypes: sensorTypes,
+      actorTypes,
     },
   };
 };
 
-export default EquipmentSensors;
+export default EquipmentActors;

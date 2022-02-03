@@ -13,7 +13,8 @@ import {
   faToggleOn,
   faUtensilSpoon,
 } from '@fortawesome/free-solid-svg-icons';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
+import { GlobalContext } from '../../lib/global-context';
 import Footer from './footer';
 import NavbarMain from './navbar';
 import Page from './page';
@@ -116,9 +117,16 @@ const menuItems: MenuItemType[] = [
 interface IAppLayoutProps {}
 
 const AppLayout: FC<IAppLayoutProps> = ({ children }) => {
+  const { showSidebar, toggleSidebar } = useContext(GlobalContext);
+
   return (
-    <div className="sidebar-mini layout-fixed" data-reset-height="false">
-      <NavbarMain />
+    <div
+      className={`sidebar-mini layout-fixed ${
+        showSidebar ? '' : 'sidebar-collapse'
+      }`}
+      data-reset-height="false"
+    >
+      <NavbarMain closeSidebar={toggleSidebar} />
       <Sidebar menuItems={menuItems} />
       <Page>{children}</Page>
       <Footer />

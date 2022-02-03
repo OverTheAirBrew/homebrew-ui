@@ -1,40 +1,26 @@
 import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
-import { FieldValues, UseFormRegister } from 'react-hook-form';
+import { IFormPartProps } from '.';
 import { ErrorMessage, isRequiredMessage } from './utils';
 
-interface IInputProps {
-  fieldId: string;
-  translationFieldName: string;
-  type: 'text' | 'number';
-  isRequired: boolean;
-  register: UseFormRegister<FieldValues>;
-  errors: Record<string, any>;
-}
-
-const Input: FC<IInputProps> = ({
-  translationFieldName,
-  fieldId,
-  type,
-  isRequired,
+const Input: FC<IFormPartProps> = ({
+  part: { id, isRequired, name, type },
   register,
   errors,
 }) => {
   const { t } = useTranslation();
 
-  const requiredMessage = isRequired
-    ? isRequiredMessage(t, translationFieldName)
-    : false;
+  const requiredMessage = isRequired ? isRequiredMessage(t, name) : false;
 
   return (
     <div className="form-group">
-      <label htmlFor={fieldId}>{t(translationFieldName)}</label>
+      <label htmlFor={id}>{t(name)}</label>
       <input
         type={type}
         className="form-control"
-        {...register(fieldId, { required: requiredMessage })}
+        {...register(id, { required: requiredMessage })}
       />
-      <ErrorMessage>{errors[fieldId]?.message}</ErrorMessage>
+      <ErrorMessage>{errors[id]?.message}</ErrorMessage>
     </div>
   );
 };

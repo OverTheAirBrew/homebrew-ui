@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+const pkgInfo = require('../../package.json');
+
 const Footer: FC = ({ children }) => {
   return (
     <footer className="main-footer">
@@ -9,7 +11,7 @@ const Footer: FC = ({ children }) => {
       </strong>
       All rights reserved.
       <div className="float-right d-none d-sm-inline-block">
-        <b>Version</b> 3.1.0
+        <b>Version</b> {pkgInfo.version}
       </div>
     </footer>
   );

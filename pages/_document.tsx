@@ -28,15 +28,4 @@ export default class MyDocument extends Document {
       sheet.seal();
     }
   }
-
-  // render() {
-  //   return (
-  //     <Html>
-  //       <body className="sidebar-mini layout-fixed">
-  //         <Main />
-  //         <NextScript />
-  //       </body>
-  //     </Html>
-  //   );
-  // }
 }

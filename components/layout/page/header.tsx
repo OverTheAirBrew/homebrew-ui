@@ -1,12 +1,13 @@
+import { useRouter } from 'next/dist/client/router';
 import { FC } from 'react';
 
 interface IPageHeaderProps {
   title: string;
-  currentPath: string;
 }
 
-const PageHeader: FC<IPageHeaderProps> = ({ title, currentPath }) => {
-  const splitPath = currentPath.split('/').filter((cp) => !!cp);
+const PageHeader: FC<IPageHeaderProps> = ({ title }) => {
+  const router = useRouter();
+  const splitPath = router.pathname.split('/').filter((cp) => !!cp);
 
   function capitalize(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
@@ -24,15 +25,6 @@ const PageHeader: FC<IPageHeaderProps> = ({ title, currentPath }) => {
               {splitPath.map((sp) => {
                 return <li className="breadcrumb-item">{capitalize(sp)}</li>;
               })}
-
-              {/* <li className="breadcrumb-item">
-                <Link href="/">
-                  <a>Test</a>
-                </Link>
-              </li>
-              <li className="breadcrumb-item active">
-                <a>Test 1</a>
-              </li> */}
             </ol>
           </div>
         </div>

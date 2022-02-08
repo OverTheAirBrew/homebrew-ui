@@ -1,7 +1,7 @@
 // import { } from 'admin-lte'
 // const {Item} = Sidebar
 
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
   faBookOpen,
   faBurn,
@@ -12,103 +12,103 @@ import {
   faThermometerFull,
   faToggleOn,
   faUtensilSpoon,
-} from '@fortawesome/free-solid-svg-icons';
-import { FC, useContext } from 'react';
-import { GlobalContext } from '../../lib/global-context';
-import Footer from './footer';
-import NavbarMain from './navbar';
-import Page from './page';
-import Sidebar, { MenuItemType } from './sidebar';
+} from "@fortawesome/free-solid-svg-icons";
+import { FC } from "react";
+import { useAppContext } from "../../lib/context";
+import Footer from "./footer";
+import NavbarMain from "./navbar";
+import Page from "./page";
+import Sidebar, { MenuItemType } from "./sidebar";
 
 const menuItems: MenuItemType[] = [
   {
-    title: 'Brewing',
+    title: "Brewing",
     icon: faBurn,
     link: {
-      href: '/brewing',
+      href: "/brewing",
     },
   },
   {
-    title: 'Fermenting',
+    title: "Fermenting",
     icon: faRedoAlt,
     link: {
-      href: '/fermenting',
+      href: "/fermenting",
     },
   },
   {
-    title: 'Equipment',
+    title: "Equipment",
     group: true,
   },
   {
-    title: 'Kettle',
-    icon: faUtensilSpoon,
+    title: "Kettle",
+    icon: faBurn,
     link: {
-      href: '/equipment/kettle',
+      href: "/equipment/kettle",
     },
   },
   {
-    title: 'Fermenter',
+    title: "Fermenter",
     icon: faUtensilSpoon,
     link: {
-      href: '/equipment/fermenter',
+      href: "/equipment/fermenter",
     },
   },
   {
-    title: 'Sensors',
+    title: "Sensors",
     icon: faThermometerFull,
     link: {
-      href: '/equipment/sensors',
+      href: "/equipment/sensors",
     },
   },
   {
-    title: 'Actors',
+    title: "Actors",
     icon: faToggleOn,
     link: {
-      href: '/equipment/actors',
+      href: "/equipment/actors",
     },
   },
   {
-    title: 'Admin',
+    title: "Admin",
     group: true,
   },
   {
-    title: 'Settings',
+    title: "Settings",
     icon: faCog,
     link: {
-      href: '/admin/settings',
+      href: "/admin/settings",
     },
   },
   {
-    title: 'Plugins',
+    title: "Plugins",
     icon: faPlug,
     link: {
-      href: '/admin/plugins',
+      href: "/admin/plugins",
     },
   },
   {
-    title: 'Help',
+    title: "Help",
     group: true,
   },
   {
-    title: 'About',
+    title: "About",
     icon: faInfoCircle,
     link: {
-      href: '/help/about',
+      href: "/help/about",
     },
   },
   {
-    title: 'Github',
+    title: "Github",
     icon: faGithub,
     link: {
-      href: 'https://github.com/overtheairbrew',
+      href: "https://github.com/overtheairbrew",
       external: true,
     },
   },
   {
-    title: 'Development Docs',
+    title: "Development Docs",
     icon: faBookOpen,
     link: {
-      href: 'https://overtheair-homebrew.readthedocs.io/en/latest/',
+      href: "https://overtheair-homebrew.readthedocs.io/en/latest/",
       external: true,
     },
   },
@@ -117,16 +117,15 @@ const menuItems: MenuItemType[] = [
 interface IAppLayoutProps {}
 
 const AppLayout: FC<IAppLayoutProps> = ({ children }) => {
-  const { showSidebar, toggleSidebar } = useContext(GlobalContext);
+  const { sidebar } = useAppContext();
 
   return (
     <div
       className={`sidebar-mini layout-fixed ${
-        showSidebar ? '' : 'sidebar-collapse'
+        sidebar.show ? "" : "sidebar-collapse"
       }`}
-      data-reset-height="false"
     >
-      <NavbarMain closeSidebar={toggleSidebar} />
+      <NavbarMain />
       <Sidebar menuItems={menuItems} />
       <Page>{children}</Page>
       <Footer />

@@ -1,7 +1,7 @@
-import { useTranslation } from 'next-i18next';
-import { FC } from 'react';
-import { IFormPartProps } from '.';
-import { ErrorMessage, isRequiredMessage } from './utils';
+import { useTranslation } from "@overtheairbrew/next-i18next";
+import { FC } from "react";
+import { IFormPartProps } from ".";
+import { ErrorMessage, isRequiredMessage } from "./utils";
 
 const Input: FC<IFormPartProps> = ({
   part: { id, isRequired, name, type },

@@ -1,2 +1,2 @@
-const config = require('next/config').default();
-export default config;
+export const IS_PRODUCTION = process.env.NODE_ENV === "production";
+export const BASE_URL = `http://localhost:3000`;

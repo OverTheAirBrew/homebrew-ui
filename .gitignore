@@ -33,18 +33,8 @@ yarn-error.log*
 # vercel
 .vercel
 
-index.d.ts
+# typescript
+*.tsbuildinfo
 
-package
-*.tgz
-
-
-**/*.js
-**/*.js.map
-
-*.js
-
-!next-i18next.config.js
-!next.config.js
-
+public/locales
 locale-config.json

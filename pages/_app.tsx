@@ -1,24 +1,26 @@
-import { appWithTranslation } from 'next-i18next';
+import { appWithTranslation } from '@overtheairbrew/next-i18next';
+import type { AppProps } from 'next/app';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import AppLayout from '../components/layout/app-layout';
-import { GlobalProvider } from '../lib/global-context';
+import { AppWrapper } from '../lib/context';
 import '../styles/globals.scss';
 const nextI18NextConfig = require('../next-i18next.config');
 
-function OtaApp({ Component, pageProps }: { Component: any; pageProps: any }) {
+function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
   useEffect(() => {
     import('bootstrap/dist/js/bootstrap.js' as any);
   }, []);
 
   return (
-    <>
-      <GlobalProvider>
-        <AppLayout>
-          <Component {...pageProps} />
-        </AppLayout>
-      </GlobalProvider>
-    </>
+    <AppWrapper>
+      <AppLayout>
+        <Component {...pageProps} />
+      </AppLayout>
+    </AppWrapper>
   );
 }
 
-export default appWithTranslation(OtaApp, nextI18NextConfig);
+export default appWithTranslation(MyApp, nextI18NextConfig);

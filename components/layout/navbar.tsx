@@ -1,14 +1,18 @@
-import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FC } from 'react';
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FC } from "react";
+import { useAppContext } from "../../lib/context";
 
-interface INavbarMainProps {
-  closeSidebar: () => void;
-}
+interface INavbarMainProps {}
 
-const NavbarMain: FC<INavbarMainProps> = ({ closeSidebar }) => {
+const NavbarMain: FC<INavbarMainProps> = () => {
+  const { sidebar } = useAppContext();
+
   return (
-    <nav className="main-header navbar navbar-expand navbar-white navbar-light">
+    <nav
+      className="main-header navbar navbar-expand navbar-white navbar-light"
+      style={{ minHeight: "57px", maxHeight: "57px" }}
+    >
       <ul className="navbar-nav">
         <li className="nav-item">
           <a
@@ -16,7 +20,9 @@ const NavbarMain: FC<INavbarMainProps> = ({ closeSidebar }) => {
             data-widget="pushmenu"
             href="#"
             role="button"
-            onClick={closeSidebar}
+            onClick={() => {
+              sidebar.toggle();
+            }}
           >
             <FontAwesomeIcon icon={faBars} />
           </a>

@@ -1,25 +1,23 @@
-import axios from 'axios';
 import { outputFile } from 'fs-extra';
-import { createServer } from 'http';
-import next from 'next';
+import fetch from 'isomorphic-unfetch';
 import { join } from 'path';
-
-const IS_DEV = process.env.NODE_ENV === 'development';
 
 Promise.resolve()
   .then(async () => {
-    const { data } = await axios.get('http://localhost:9090/translations');
+    const response = await fetch('http://localhost:9090/translations');
+    const data = await response.json();
 
     for (const d of Object.keys(data.translations)) {
       const translationData = data.translations[d];
-      outputFile(
-        join(__dirname, 'public', 'locales', `${d}.json`),
+
+      await outputFile(
+        join(__dirname, '..', 'public', 'locales', `${d}.json`),
         JSON.stringify(translationData, null, 2),
         {},
       );
     }
 
-    outputFile(
+    await outputFile(
       join(__dirname, 'locale-config.json'),
       JSON.stringify({
         locales: data.locales,
@@ -28,14 +26,7 @@ Promise.resolve()
       {},
     );
 
-    const app = next({ dev: IS_DEV });
-    const handle = app.getRequestHandler();
-
-    app.prepare().then(() => {
-      createServer((req, res) => {
-        handle(req, res);
-      }).listen(3000);
-    });
+    process.exit(0);
   })
   .catch((err) => {
     console.error(err);

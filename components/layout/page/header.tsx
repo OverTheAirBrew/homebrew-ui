@@ -23,7 +23,11 @@ const PageHeader: FC<IPageHeaderProps> = ({ title }) => {
           <div className="col-sm-6">
             <ol className="breadcrumb float-sm-right">
               {splitPath.map((sp) => {
-                return <li className="breadcrumb-item">{capitalize(sp)}</li>;
+                return (
+                  <li key={sp} className="breadcrumb-item">
+                    {capitalize(sp)}
+                  </li>
+                );
               })}
             </ol>
           </div>

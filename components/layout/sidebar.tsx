@@ -1,10 +1,10 @@
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { useRouter } from 'next/dist/client/router';
-import Link from 'next/link';
-import { FC } from 'react';
-import { RequireOnlyOne } from '../../lib/require-one-of';
-import MenuItemGroup from './menu-items/group';
-import LinkItem from './menu-items/link-item';
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { FC } from "react";
+import { RequireOnlyOne } from "../../lib/require-one-of";
+import MenuItemGroup from "./menu-items/group";
+import LinkItem from "./menu-items/link-item";
 
 interface ItemType {
   title: string;
@@ -16,7 +16,7 @@ interface ItemType {
   icon?: IconProp;
 }
 
-export type MenuItemType = RequireOnlyOne<ItemType, 'link' | 'group'>;
+export type MenuItemType = RequireOnlyOne<ItemType, "link" | "group">;
 
 interface ISidebarProps {
   menuItems: MenuItemType[];
@@ -26,12 +26,13 @@ const Sidebar: FC<ISidebarProps> = ({ menuItems }) => {
   const router = useRouter();
 
   return (
-    <aside className="main-sidebar main-sidebar-custom sidebar-dark-primary elevation-4">
+    <aside className="main-sidebar sidebar-dark-primary elevation-4">
       <Link href="#">
         <a className="brand-link">
           <img
             src="/OTA_Logo_SocialCircle.svg"
             className="brand-image img-circle elevation-3"
+            alt="logo"
           />
 
           <span className="brand-text font-weight-light">
@@ -49,10 +50,16 @@ const Sidebar: FC<ISidebarProps> = ({ menuItems }) => {
           >
             {menuItems.map((mi) => {
               if (mi.group) {
-                return <MenuItemGroup item={mi} />;
+                return <MenuItemGroup key={mi.title} item={mi} />;
               }
 
-              return <LinkItem item={mi} currentPath={router.pathname} />;
+              return (
+                <LinkItem
+                  key={mi.title}
+                  item={mi}
+                  currentPath={router.pathname}
+                />
+              );
             })}
           </ul>
         </nav>

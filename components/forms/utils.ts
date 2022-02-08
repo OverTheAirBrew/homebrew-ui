@@ -1,12 +1,12 @@
-import { TFunction } from 'next-i18next';
-import styled from 'styled-components';
+import { TFunction } from "@overtheairbrew/next-i18next";
+import styled from "styled-components";
 
 export function isRequiredMessage(
   t: TFunction,
   property: string,
-  namespace?: string,
+  namespace?: string
 ): string {
-  return t('interpolation.is-required', {
+  return t("interpolation.is-required", {
     name: t(property, { ns: namespace }),
   });
 }

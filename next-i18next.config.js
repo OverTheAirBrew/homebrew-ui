@@ -1,26 +1,23 @@
-const i18nextHttpBackend = require('i18next-http-backend/cjs');
-const chainedBackend = require('i18next-chained-backend').default;
-const localStorageBackend = require('i18next-localstorage-backend').default;
-
 const localConfig = require('./locale-config.json');
+const httpBackend = require('i18next-http-backend');
+const localStorageBackend = require('i18next-localstorage-backend').default;
+const chainedBackend = require('i18next-chained-backend').default;
 
 module.exports = {
-  backend: {
-    backendOptions: [{}, { expirationTime: 60 * 60 * 1000 }], // 1 hour
-    backends: process.browser ? [localStorageBackend, i18nextHttpBackend] : [],
-  },
+  backend: {},
   i18n: {
     defaultLocale: 'en',
     locales: localConfig.locales,
   },
-  use: process.browser ? [chainedBackend] : [],
+  // use: process.browser ? [chainedBackend] : [httpBackend],
   ns: localConfig.namespaces,
   defaultNS: 'common',
   serializeConfig: false,
-  // preload: ['en-GB'],
+  preload: ['en'],
   partialBundledLanguages: true,
   debug: false,
   react: {
     useSuspense: false,
   },
+  initImmediate: true,
 };

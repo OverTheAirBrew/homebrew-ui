@@ -150,7 +150,7 @@ const TableWithAddModal: FC<ITableWithAddModalProps> = ({
                   <TableBody>
                     {values?.map((value) => {
                       return (
-                        <TableRow>
+                        <TableRow key={value.name}>
                           <TableBodyCell>{value.name}</TableBodyCell>
                           <TableBodyCell>{value.type_id}</TableBodyCell>
                           <TableBodyCell>0</TableBodyCell>

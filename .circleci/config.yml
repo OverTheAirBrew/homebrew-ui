@@ -3,6 +3,8 @@ jobs:
   build:
     docker:
       - image: 'circleci/node:14'
+    environment:
+      NODE_ENV: 'production'
     steps:
       - checkout
       - run:

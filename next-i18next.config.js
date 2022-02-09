@@ -1,4 +1,8 @@
-const localConfig = require('./locale-config.json');
+const localConfig = require('./locale-config.json') || {
+  locales: ['en'],
+  namespaces: ['common'],
+};
+
 const httpBackend = require('i18next-http-backend');
 const localStorageBackend = require('i18next-localstorage-backend').default;
 const chainedBackend = require('i18next-chained-backend').default;

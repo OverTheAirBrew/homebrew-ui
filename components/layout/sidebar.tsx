@@ -1,10 +1,10 @@
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { FC } from "react";
-import { RequireOnlyOne } from "../../lib/require-one-of";
-import MenuItemGroup from "./menu-items/group";
-import LinkItem from "./menu-items/link-item";
+import { IconName } from '@fortawesome/fontawesome-common-types';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { FC } from 'react';
+import { RequireOnlyOne } from '../../lib/require-one-of';
+import MenuItemGroup from './menu-items/group';
+import LinkItem from './menu-items/link-item';
 
 interface ItemType {
   title: string;
@@ -13,10 +13,10 @@ interface ItemType {
     external?: boolean;
   };
   group: boolean;
-  icon?: IconProp;
+  icon?: IconName;
 }
 
-export type MenuItemType = RequireOnlyOne<ItemType, "link" | "group">;
+export type MenuItemType = RequireOnlyOne<ItemType, 'link' | 'group'>;
 
 interface ISidebarProps {
   menuItems: MenuItemType[];

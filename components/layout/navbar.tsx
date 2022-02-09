@@ -1,7 +1,6 @@
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FC } from "react";
-import { useAppContext } from "../../lib/context";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FC } from 'react';
+import { useAppContext } from '../../lib/context';
 
 interface INavbarMainProps {}
 
@@ -11,7 +10,7 @@ const NavbarMain: FC<INavbarMainProps> = () => {
   return (
     <nav
       className="main-header navbar navbar-expand navbar-white navbar-light"
-      style={{ minHeight: "57px", maxHeight: "57px" }}
+      style={{ minHeight: '57px', maxHeight: '57px' }}
     >
       <ul className="navbar-nav">
         <li className="nav-item">
@@ -24,7 +23,7 @@ const NavbarMain: FC<INavbarMainProps> = () => {
               sidebar.toggle();
             }}
           >
-            <FontAwesomeIcon icon={faBars} />
+            <FontAwesomeIcon icon="bars" />
           </a>
         </li>
       </ul>

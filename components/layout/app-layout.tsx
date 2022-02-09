@@ -1,114 +1,102 @@
 // import { } from 'admin-lte'
 // const {Item} = Sidebar
 
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import {
-  faBookOpen,
-  faBurn,
-  faCog,
-  faInfoCircle,
-  faPlug,
-  faRedoAlt,
-  faThermometerFull,
-  faToggleOn,
-  faUtensilSpoon,
-} from "@fortawesome/free-solid-svg-icons";
-import { FC } from "react";
-import { useAppContext } from "../../lib/context";
-import Footer from "./footer";
-import NavbarMain from "./navbar";
-import Page from "./page";
-import Sidebar, { MenuItemType } from "./sidebar";
+import { FC } from 'react';
+import { useAppContext } from '../../lib/context';
+import Footer from './footer';
+import NavbarMain from './navbar';
+import Page from './page';
+import Sidebar, { MenuItemType } from './sidebar';
 
 const menuItems: MenuItemType[] = [
   {
-    title: "Brewing",
-    icon: faBurn,
+    title: 'Brewing',
+    icon: 'burn',
     link: {
-      href: "/brewing",
+      href: '/brewing',
     },
   },
   {
-    title: "Fermenting",
-    icon: faRedoAlt,
+    title: 'Fermenting',
+    icon: 'redo-alt',
     link: {
-      href: "/fermenting",
+      href: '/fermenting',
     },
   },
   {
-    title: "Equipment",
+    title: 'Equipment',
     group: true,
   },
   {
-    title: "Kettle",
-    icon: faBurn,
+    title: 'Kettle',
+    icon: 'burn',
     link: {
-      href: "/equipment/kettle",
+      href: '/equipment/kettle',
     },
   },
   {
-    title: "Fermenter",
-    icon: faUtensilSpoon,
+    title: 'Fermenter',
+    icon: 'utensil-spoon',
     link: {
-      href: "/equipment/fermenter",
+      href: '/equipment/fermenter',
     },
   },
   {
-    title: "Sensors",
-    icon: faThermometerFull,
+    title: 'Sensors',
+    icon: 'thermometer-full',
     link: {
-      href: "/equipment/sensors",
+      href: '/equipment/sensors',
     },
   },
   {
-    title: "Actors",
-    icon: faToggleOn,
+    title: 'Actors',
+    icon: 'toggle-on',
     link: {
-      href: "/equipment/actors",
+      href: '/equipment/actors',
     },
   },
   {
-    title: "Admin",
+    title: 'Admin',
     group: true,
   },
   {
-    title: "Settings",
-    icon: faCog,
+    title: 'Settings',
+    icon: 'cog',
     link: {
-      href: "/admin/settings",
+      href: '/admin/settings',
     },
   },
   {
-    title: "Plugins",
-    icon: faPlug,
+    title: 'Plugins',
+    icon: 'plug',
     link: {
-      href: "/admin/plugins",
+      href: '/admin/plugins',
     },
   },
   {
-    title: "Help",
+    title: 'Help',
     group: true,
   },
   {
-    title: "About",
-    icon: faInfoCircle,
+    title: 'About',
+    icon: 'info-circle',
     link: {
-      href: "/help/about",
+      href: '/help/about',
     },
   },
   {
-    title: "Github",
-    icon: faGithub,
+    title: 'Github',
+    icon: 'github',
     link: {
-      href: "https://github.com/overtheairbrew",
+      href: 'https://github.com/overtheairbrew',
       external: true,
     },
   },
   {
-    title: "Development Docs",
-    icon: faBookOpen,
+    title: 'Development Docs',
+    icon: 'book-open',
     link: {
-      href: "https://overtheair-homebrew.readthedocs.io/en/latest/",
+      href: 'https://overtheair-homebrew.readthedocs.io/en/latest/',
       external: true,
     },
   },
@@ -122,7 +110,7 @@ const AppLayout: FC<IAppLayoutProps> = ({ children }) => {
   return (
     <div
       className={`sidebar-mini layout-fixed ${
-        sidebar.show ? "" : "sidebar-collapse"
+        sidebar.show ? '' : 'sidebar-collapse'
       }`}
     >
       <NavbarMain />

@@ -1,4 +1,3 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '@overtheairbrew/next-i18next';
 import $ from 'jquery';
 import { FC } from 'react';
@@ -131,7 +130,7 @@ const TableWithAddModal: FC<ITableWithAddModalProps> = ({
                 <CardTool>
                   <IconButton
                     className="btn-tool"
-                    icon={faPlus}
+                    icon={'plus'}
                     data-target={`#${modalId}`}
                     data-toggle="modal"
                   />

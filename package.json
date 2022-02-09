@@ -4,6 +4,7 @@
   "version": "1.0.2",
   "scripts": {
     "prestart": "tsc -p tsconfig.scripts.json && node ./scripts/sync-translations.js",
+    "prebuild": "tsc -p tsconfig.scripts.json && node ./scripts/generate-build-locales.js",
     "predev": "npm run prestart",
     "dev": "next dev",
     "build": "next build",

@@ -1,6 +1,6 @@
 const localConfig = require('./locale-config.json') || {
-  locales: ['en'],
-  namespaces: ['common'],
+  locales: [],
+  namespaces: [],
 };
 
 const httpBackend = require('i18next-http-backend');

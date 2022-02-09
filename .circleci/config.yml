@@ -2,9 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: 'circleci/node:14'
-    environment:
-      NODE_ENV: 'production'
+      - image: 'circleci/node:14'     
     steps:
       - checkout
       - run:
@@ -12,7 +10,7 @@ jobs:
           command: npm ci
       - run:
           name: build
-          command: npm run build
+          command: NODE_ENV=production npm run build
       - run:
           name: lint
           command: |

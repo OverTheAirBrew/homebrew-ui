@@ -1,11 +1,9 @@
-module.exports = {
+const { i18n } = require("./next-i18next.config");
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
-  async rewrites() {
-    return [
-      {
-        source: '/internal-api/:path*',
-        destination: '/api/:path*',
-      },
-    ];
-  },
+  i18n,
 };
+
+module.exports = nextConfig;

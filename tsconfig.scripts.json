@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "isolatedModules": false,
+    "module": "commonjs",
+    "noEmit": false,
+    "target": "es2017"
+  },
+  "include": ["scripts/**/*.ts"]
+}

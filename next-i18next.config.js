@@ -1,7 +1,4 @@
-const localConfig = require('./locale-config.json') || {
-  locales: [],
-  namespaces: [],
-};
+const localConfig = require('./locale-config.json');
 
 const httpBackend = require('i18next-http-backend');
 const localStorageBackend = require('i18next-localstorage-backend').default;

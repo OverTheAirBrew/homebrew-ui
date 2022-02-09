@@ -8,6 +8,14 @@ Promise.resolve()
       JSON.stringify({}),
     );
 
+    await outputFile(
+      join(__dirname, '..', 'locale-config.json'),
+      JSON.stringify({
+        locales: ['en'],
+        namespaces: ['common'],
+      }),
+    );
+
     process.exit(0);
   })
   .catch((err) => {

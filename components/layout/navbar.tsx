@@ -1,3 +1,4 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC } from 'react';
 import { useAppContext } from '../../lib/context';
@@ -23,7 +24,7 @@ const NavbarMain: FC<INavbarMainProps> = () => {
               sidebar.toggle();
             }}
           >
-            <FontAwesomeIcon icon="bars" />
+            <FontAwesomeIcon icon={solid('bars')} />
           </a>
         </li>
       </ul>

@@ -1,243 +1,219 @@
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { useTranslation } from '@overtheairbrew/next-i18next';
 import { serverSideTranslations } from '@overtheairbrew/next-i18next/serverSideTranslations';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import TableWithAddModal from '../../components/table-with-add-modal';
+import IconButton from '../../components/button/icon';
+import Card from '../../components/card';
+import CardBody from '../../components/card/body';
+import CardHeader from '../../components/card/header';
+import CardTool from '../../components/card/tools';
+import FormPart from '../../components/forms';
+import Input from '../../components/forms/input';
+import SelectBox from '../../components/forms/select-box';
+import PageContent from '../../components/layout/page/content';
+import PageHeader from '../../components/layout/page/header';
+import Modal, { hideModal } from '../../components/modal';
+import Table from '../../components/table';
+import TableBody from '../../components/table/body';
+import TableBodyCell from '../../components/table/body-cell';
+import TableHead from '../../components/table/head';
+import HeaderCell from '../../components/table/header-cell';
+import TableRow from '../../components/table/row';
 import { BASE_URL } from '../../lib/config';
+import { IActor, IActorType } from '../../lib/models/actor';
+
 const localeConfig = require('../../locale-config.json');
 
 interface IEquipmentActorProps {
-  // sensors: {
-  //   id: string;
-  //   name: string;
-  //   type_id: string;
-  //   config: any;
-  // }[];
-  actorTypes: {
-    type: 'string' | 'number' | 'select-box';
-    properties: {
-      type: string;
-      id: string;
-      isRequired: boolean;
-      name: string;
-      selectBoxValues?: string[];
-    }[];
-  }[];
-
-  actors: {
-    id: string;
-    name: string;
-    type_id: string;
-    config: any;
-  }[];
+  actors: IActor[];
+  actorTypes: IActorType[];
 }
 
-const EquipmentActors: FC<IEquipmentActorProps> = ({ actorTypes, actors }) => {
-  const modalId = 'add-edit-actor-modal';
-
+const EquipmentActors: FC<IEquipmentActorProps> = ({ actors, actorTypes }) => {
   const { t } = useTranslation();
-
+  const modal_id = 'create-actor';
   const {
-    register,
     handleSubmit,
+    register,
     formState: { errors },
     reset,
   } = useForm();
 
-  const [selectedActorType, setSelectedActorType] = useState<string>();
-  const [editMode, setEditMode] = useState(false);
-  const [currentActors, setCurrentActors] = useState(actors);
+  const onModalClose = () => {
+    reset();
+    setSelectedType(undefined);
+  };
 
-  const onCreate = async (data: {
-    id: string;
-    name: string;
-    type_id: string;
-  }) => {
-    const { id, name, type_id, ...config } = data;
-
-    const postData = JSON.stringify({
-      name,
-      type_id,
-      config,
-    });
+  const onFormSubmit = async (data: any) => {
+    const { name, type_id, ...config } = data;
 
     await fetch(`${BASE_URL}/api/actors`, {
       method: 'POST',
-      body: postData,
+      body: JSON.stringify({
+        name,
+        type_id,
+        config,
+      }),
       headers: { 'content-type': 'application/json' },
     });
 
-    await reloadSensors();
+    hideModal(modal_id);
+    await refreshActors();
   };
 
-  const onEdit = async (data: {
-    id: string;
-    name: string;
-    type_id: string;
-  }) => {
-    const { id, name, type_id, ...config } = data;
-
-    const postData = JSON.stringify({
-      name,
-      type_id,
-      config,
-    });
-
-    await fetch(`${BASE_URL}/api/sensors/${id}`, {
-      body: postData,
-      headers: { 'content-type': 'application/json' },
-    });
-
-    await reloadSensors();
-  };
-
-  async function reloadSensors() {
-    const data = await fetch(`${BASE_URL}/api/actors`, {}).then((data) =>
-      data.json(),
+  const refreshActors = async () => {
+    const actors = await fetch(`${BASE_URL}/api/actors`).then((res) =>
+      res.json(),
     );
-    setCurrentActors(data as any);
-  }
+    setUserActors(actors);
+  };
+
+  const [selectedType, setSelectedType] = useState<string>();
+  const [userActors, setUserActors] = useState(actors);
+
+  const generateSensorTypeList = () => {
+    const type = actorTypes.find((at) => at.type === selectedType);
+
+    return type?.properties.map((p) => {
+      return (
+        <FormPart
+          part={{
+            ...p,
+            selectBoxValues: p.selectBoxValues?.map((s) => {
+              return { id: s, name: s };
+            }),
+          }}
+          register={register}
+          errors={errors}
+        />
+      );
+    });
+  };
 
   return (
-    <TableWithAddModal
-      types={actorTypes}
-      values={currentActors}
-      selected={{
-        set: setSelectedActorType,
-        type: selectedActorType,
-      }}
-      tableType="actors"
-      onSubmit={editMode ? onEdit : onCreate}
-      editMode={{
-        value: editMode,
-        set: setEditMode,
-      }}
-    />
+    <>
+      <PageHeader title={t('actors.name')}></PageHeader>
+      <PageContent>
+        <Card>
+          <CardHeader>
+            <CardTool>
+              <IconButton
+                className="btn-tool"
+                icon={solid('plus')}
+                data-target={`#${modal_id}`}
+                data-toggle="modal"
+              />
+            </CardTool>
+          </CardHeader>
+          <CardBody>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <HeaderCell>Name</HeaderCell>
+                  <HeaderCell>Type</HeaderCell>
+                  <HeaderCell>Current State</HeaderCell>
+                  <HeaderCell>Options</HeaderCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {userActors.map((actor) => {
+                  return (
+                    <TableRow key={actor.name}>
+                      <TableBodyCell>{actor.name}</TableBodyCell>
+                      <TableBodyCell>{actor.type_id}</TableBodyCell>
+                      <TableBodyCell>0</TableBodyCell>
+                      <TableBodyCell>
+                        {/* <Button
+                      type="button"
+                      size="sm"
+                      color="info"
+                      data-target={`#${modal_id}`}
+                      data-toggle="modal"
+                      onClick={() => {
+                        setSelectedSensorType(value.type_id);
+                        setEditMode(true);
+                        form.reset({
+                          id: value.id,
+                          name: value.name,
+                          sensorType: value.type_id,
+                          ...value.config,
+                        });
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    &nbsp;
+                    <Button type="button" size="sm" color="danger">
+                      Delete
+                    </Button> */}
+                      </TableBodyCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </CardBody>
+        </Card>
+      </PageContent>
 
-    // <>
-    //   <PageHeader title={t('actors.name')} />
-    //   <PageContent>
-    //     <Row>
-    //       <Col>
-    //         <Card>
-    //           <CardHeader
-    //             title={t('interpolation.list', { type: t('actors.name') })}
-    //           >
-    //             <CardTool>
-    //               <IconButton
-    //                 className="btn-tool"
-    //                 icon={faPlus}
-    //                 data-target={`#${modalId}`}
-    //                 data-toggle="modal"
-    //               />
-    //             </CardTool>
-    //           </CardHeader>
-    //           <CardBody>
-    //             <Table>
-    //               <TableHead>
-    //                 <TableRow>
-    //                   <HeaderCell>Name</HeaderCell>
-    //                   <HeaderCell>Type</HeaderCell>
-    //                   <HeaderCell>State</HeaderCell>
-    //                   <HeaderCell>Options</HeaderCell>
-    //                 </TableRow>
-    //               </TableHead>
-    //               <TableBody>
-    //                 {currentActors?.map((actor) => {
-    //                   return (
-    //                     <TableRow>
-    //                       <TableBodyCell>{actor.name}</TableBodyCell>
-    //                       <TableBodyCell>{actor.type_id}</TableBodyCell>
-    //                       <TableBodyCell>0</TableBodyCell>
-    //                       <TableBodyCell>
-    //                         <Button
-    //                           type="button"
-    //                           size="sm"
-    //                           color="info"
-    //                           data-target={`#${modalId}`}
-    //                           data-toggle="modal"
-    //                           onClick={() => {
-    //                             setSelectedActorType(actor.type_id);
-    //                             setEditMode(true);
-    //                             reset({
-    //                               id: actor.id,
-    //                               name: actor.name,
-    //                               sensorType: actor.type_id,
-    //                               ...actor.config,
-    //                             });
-    //                           }}
-    //                         >
-    //                           Edit
-    //                         </Button>
-    //                         &nbsp;
-    //                         <Button type="button" size="sm" color="danger">
-    //                           Delete
-    //                         </Button>
-    //                       </TableBodyCell>
-    //                     </TableRow>
-    //                   );
-    //                 })}
-    //               </TableBody>
-    //             </Table>
-    //           </CardBody>
-    //         </Card>
-    //       </Col>
-    //     </Row>
-    //   </PageContent>
+      <form onSubmit={handleSubmit(onFormSubmit)}>
+        <Modal
+          id={modal_id}
+          headerTitle={t('interpolation.new-thing', { type: t('actors.name') })}
+          footer={{
+            button: {
+              type: 'submit',
+              text: 'Create',
+            },
+          }}
+          onClose={onModalClose}
+        >
+          <Input
+            part={{
+              id: 'name',
+              name: t('global.name'),
+              isRequired: true,
+              type: 'string',
+            }}
+            register={register}
+            errors={errors}
+          />
 
-    //   <Modal id={modalId} color="default" size="lg" onClose={onModalClose}>
-    //     <form onSubmit={editMode ? onEdit : onCreate}>
-    //       <input hidden {...register('id')} />
+          <SelectBox
+            part={{
+              id: 'type_id',
+              name: t('actors.type'),
+              isRequired: true,
+              selectBoxValues: actorTypes.map((at) => {
+                return {
+                  id: at.type,
+                  name: at.type,
+                };
+              }),
+              type: 'select-box',
+              onChange: (e) => {
+                setSelectedType(e.target.value);
+              },
+            }}
+            register={register}
+            errors={errors}
+          />
 
-    //       <ModalHeader
-    //         title={t('interpolation.new-thing', { type: t('actors.name') })}
-    //       />
-    //       <ModalBody>
-    //         <Input
-    //           part={{
-    //             id: 'name',
-    //             name: 'global.name',
-    //             isRequired: true,
-    //             type: 'string',
-    //             selectBoxValues: [],
-    //           }}
-    //           register={register}
-    //           errors={errors}
-    //         />
+          <hr />
 
-    //         <SelectBox
-    //           part={{
-    //             id: 'type_id',
-    //             name: t('actors.type'),
-    //             isRequired: true,
-    //             selectBoxValues: actorTypes.map((st) => st.type),
-    //             type: 'select-box',
-    //             onChange: (e) => {
-    //               console.log(e);
-    //               setSelectedActorType(e.target.value);
-    //             },
-    //           }}
-    //           register={register}
-    //           errors={errors}
-    //         />
-
-    //         <hr />
-
-    //         {generateSensorTypeForm(register, errors)}
-    //       </ModalBody>
-    //       <ModalFooter>
-    //         <Button
-    //           color="primary"
-    //           type="submit"
-    //           size="sm"
-    //           className="float-right"
-    //         >
-    //           Save
-    //         </Button>
-    //       </ModalFooter>
-    //     </form>
-    //   </Modal>
-    // </>
+          {selectedType ? (
+            <>{generateSensorTypeList()}</>
+          ) : (
+            <>
+              {t('interpolation.select-type-message', {
+                type: t('actors.type'),
+              })}
+            </>
+          )}
+        </Modal>
+      </form>
+    </>
   );
 };
 

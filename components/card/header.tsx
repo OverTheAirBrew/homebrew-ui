@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 interface ICardHeaderProps {
-  title: string;
+  title?: string;
 }
 
 const CardHeader: FC<ICardHeaderProps> = ({ title, children }) => {

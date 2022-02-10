@@ -1,6 +1,7 @@
 // import { } from 'admin-lte'
 // const {Item} = Sidebar
 
+import { brands, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { FC } from 'react';
 import { useAppContext } from '../../lib/context';
 import Footer from './footer';
@@ -11,14 +12,14 @@ import Sidebar, { MenuItemType } from './sidebar';
 const menuItems: MenuItemType[] = [
   {
     title: 'Brewing',
-    icon: 'burn',
+    icon: solid('burn'),
     link: {
       href: '/brewing',
     },
   },
   {
     title: 'Fermenting',
-    icon: 'redo-alt',
+    icon: solid('redo-alt'),
     link: {
       href: '/fermenting',
     },
@@ -29,28 +30,28 @@ const menuItems: MenuItemType[] = [
   },
   {
     title: 'Kettle',
-    icon: 'burn',
+    icon: solid('burn'),
     link: {
-      href: '/equipment/kettle',
+      href: '/equipment/kettles',
     },
   },
   {
     title: 'Fermenter',
-    icon: 'utensil-spoon',
+    icon: solid('utensil-spoon'),
     link: {
-      href: '/equipment/fermenter',
+      href: '/equipment/fermenters',
     },
   },
   {
     title: 'Sensors',
-    icon: 'thermometer-full',
+    icon: solid('thermometer-full'),
     link: {
       href: '/equipment/sensors',
     },
   },
   {
     title: 'Actors',
-    icon: 'toggle-on',
+    icon: solid('toggle-on'),
     link: {
       href: '/equipment/actors',
     },
@@ -61,14 +62,14 @@ const menuItems: MenuItemType[] = [
   },
   {
     title: 'Settings',
-    icon: 'cog',
+    icon: solid('cog'),
     link: {
       href: '/admin/settings',
     },
   },
   {
     title: 'Plugins',
-    icon: 'plug',
+    icon: solid('plug'),
     link: {
       href: '/admin/plugins',
     },
@@ -79,14 +80,14 @@ const menuItems: MenuItemType[] = [
   },
   {
     title: 'About',
-    icon: 'info-circle',
+    icon: solid('info-circle'),
     link: {
       href: '/help/about',
     },
   },
   {
     title: 'Github',
-    icon: 'github',
+    icon: brands('github'),
     link: {
       href: 'https://github.com/overtheairbrew',
       external: true,
@@ -94,7 +95,7 @@ const menuItems: MenuItemType[] = [
   },
   {
     title: 'Development Docs',
-    icon: 'book-open',
+    icon: solid('book-open'),
     link: {
       href: 'https://overtheair-homebrew.readthedocs.io/en/latest/',
       external: true,

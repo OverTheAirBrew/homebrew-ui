@@ -1,4 +1,4 @@
-import { IconName } from '@fortawesome/fontawesome-common-types';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
@@ -13,7 +13,7 @@ interface ItemType {
     external?: boolean;
   };
   group: boolean;
-  icon?: IconName;
+  icon?: IconProp;
 }
 
 export type MenuItemType = RequireOnlyOne<ItemType, 'link' | 'group'>;

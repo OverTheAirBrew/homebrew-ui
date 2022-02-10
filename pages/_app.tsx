@@ -1,5 +1,5 @@
 import { appWithTranslation } from '@overtheairbrew/next-i18next';
-import type { AppProps } from 'next/app';
+import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import AppLayout from '../components/layout/app-layout';

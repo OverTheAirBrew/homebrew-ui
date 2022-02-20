@@ -14,7 +14,7 @@ Promise.resolve()
         const translationData = data.translations[d];
         await (0, fs_extra_1.outputFile)((0, path_1.join)(__dirname, '..', 'public', 'locales', `${d}.json`), JSON.stringify(translationData, null, 2), {});
     }
-    await (0, fs_extra_1.outputFile)((0, path_1.join)(__dirname, 'locale-config.json'), JSON.stringify({
+    await (0, fs_extra_1.outputFile)((0, path_1.join)(__dirname, '..', 'locale-config.json'), JSON.stringify({
         locales: data.locales,
         namespaces: data.namespaces,
     }), {});

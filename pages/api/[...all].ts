@@ -1,15 +1,17 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import httpProxyMiddleware from "next-http-proxy-middleware";
+import { NextApiRequest, NextApiResponse } from 'next';
+import httpProxyMiddleware from 'next-http-proxy-middleware';
 
-export default (req: NextApiRequest, res: NextApiResponse) =>
+const allApiRoute = (req: NextApiRequest, res: NextApiResponse) =>
   httpProxyMiddleware(req, res, {
     // You can use the `http-proxy` option
-    target: "http://localhost:9090",
+    target: 'http://localhost:9090',
     // In addition, you can use the `pathRewrite` option provided by `next-http-proxy-middleware`
     pathRewrite: [
       {
-        patternStr: "^/api",
-        replaceStr: "",
+        patternStr: '^/api',
+        replaceStr: '',
       },
     ],
   });
+
+export default allApiRoute;

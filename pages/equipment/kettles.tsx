@@ -3,6 +3,7 @@ import { useTranslation } from '@overtheairbrew/next-i18next';
 import { serverSideTranslations } from '@overtheairbrew/next-i18next/serverSideTranslations';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Button from '../../components/button';
 import IconButton from '../../components/button/icon';
 import Card from '../../components/card';
 import CardBody from '../../components/card/body';
@@ -21,18 +22,27 @@ import TableHead from '../../components/table/head';
 import HeaderCell from '../../components/table/header-cell';
 import TableRow from '../../components/table/row';
 import { BASE_URL } from '../../lib/config';
-import { ISensor, ISensorType } from '../../lib/models/sensor';
+import { IActor } from '../../lib/models/actor';
+import { IKettle, ILogicType } from '../../lib/models/kettle';
+import { ISensor } from '../../lib/models/sensor';
 
 const localeConfig = require('../../locale-config.json');
 
 interface IEquipmentActorProps {
   sensors: ISensor[];
-  sensorTypes: ISensorType[];
+  actors: IActor[];
+  kettles: IKettle[];
+  logicTypes: ILogicType[];
 }
 
-const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
+const EquipmentKettles: FC<IEquipmentActorProps> = ({
+  actors,
+  sensors,
+  logicTypes,
+  kettles,
+}) => {
+  const modal_id = 'kettle-modal';
   const { t } = useTranslation();
-  const modal_id = 'create-sensor';
   const {
     handleSubmit,
     register,
@@ -42,13 +52,15 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
 
   const onFormSubmit = async (data: any) => {
     if (!isEditMode) {
-      const { name, type_id, ...config } = data;
+      const { name, sensor_id, heater_id, logicType_id, config } = data;
 
-      await fetch(`${BASE_URL}/api/sensors`, {
+      await fetch(`${BASE_URL}/api/kettles`, {
         method: 'POST',
         body: JSON.stringify({
           name,
-          type_id,
+          sensor_id,
+          heater_id,
+          logicType_id,
           config,
         }),
         headers: { 'content-type': 'application/json' },
@@ -63,30 +75,29 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
         updateObj[key] = value;
       }
 
-      await fetch(`${BASE_URL}/api/sensors/${id}`, {
+      await fetch(`${BASE_URL}/api/kettles/${id}`, {
         method: 'PUT',
-        body: JSON.stringify(updateObj),
+        body: JSON.stringify({
+          ...updateObj,
+        }),
         headers: { 'content-type': 'application/json' },
       });
     }
 
     hideModal(modal_id);
-    await refreshSensors();
+    await reloadKettles();
   };
 
-  const refreshSensors = async () => {
-    const sensors = await fetch(`${BASE_URL}/api/sensors`).then((res) =>
+  const reloadKettles = async () => {
+    const kettles = await fetch(`${BASE_URL}/api/kettles`).then((res) =>
       res.json(),
     );
-    setUserSensors(sensors);
+
+    setUserKettles(kettles);
   };
 
-  const [selectedType, setSelectedType] = useState<string>();
-  const [userSensors, setUserSensors] = useState(sensors);
-  const [isEditMode, setEditMode] = useState(false);
-
   const generateTypesList = () => {
-    const type = sensorTypes.find((st) => st.type === selectedType);
+    const type = logicTypes.find((lt) => lt.type === selectedType);
 
     if (type) {
       return generateFormFromType(type, { register, errors }, 'config');
@@ -95,9 +106,13 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
     return <></>;
   };
 
+  const [userKettles, setUserKettles] = useState(kettles);
+  const [selectedType, setSelectedType] = useState<string>();
+  const [isEditMode, setIsEditMode] = useState(false);
+
   return (
     <>
-      <PageHeader title={t('sensors.name')}></PageHeader>
+      <PageHeader title={t('kettles.name')} />
       <PageContent>
         <Card>
           <CardHeader>
@@ -107,53 +122,69 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
                 icon={solid('plus')}
                 data-target={`#${modal_id}`}
                 data-toggle="modal"
+                onClick={() => {
+                  reset({
+                    name: '',
+                    sensor_id: '',
+                    heater_id: '',
+                    logicType_id: '',
+                    config: '',
+                  });
+                  setSelectedType('');
+                  setIsEditMode(false);
+                }}
               />
             </CardTool>
           </CardHeader>
-          <CardBody>
-            <Table>
+          <CardBody tableResponsive>
+            <Table striped>
               <TableHead>
                 <TableRow>
                   <HeaderCell>Name</HeaderCell>
-                  <HeaderCell>Type</HeaderCell>
-                  <HeaderCell>Current Value</HeaderCell>
+                  <HeaderCell>Logic</HeaderCell>
+                  <HeaderCell>Sensor</HeaderCell>
+                  <HeaderCell>Heater</HeaderCell>
                   <HeaderCell>Options</HeaderCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {userSensors.map((sensor) => {
+                {userKettles.map((kettle) => {
                   return (
-                    <TableRow key={sensor.name}>
-                      <TableBodyCell>{sensor.name}</TableBodyCell>
-                      <TableBodyCell>{sensor.type_id}</TableBodyCell>
-                      <TableBodyCell>0</TableBodyCell>
+                    <TableRow key={kettle.id}>
+                      <TableBodyCell>{kettle.name}</TableBodyCell>
+                      <TableBodyCell>{kettle.logicType_id}</TableBodyCell>
                       <TableBodyCell>
-                        {/* <Button
+                        {sensors.find((s) => s.id === kettle.sensor_id)?.name}
+                      </TableBodyCell>
+                      <TableBodyCell>
+                        {actors.find((a) => a.id === kettle.heater_id)?.name}
+                      </TableBodyCell>
+                      <TableBodyCell>
+                        <Button
                           type="button"
                           size="sm"
                           color="info"
                           data-target={`#${modal_id}`}
                           data-toggle="modal"
                           onClick={() => {
-                            setSelectedType(sensor.type_id);
+                            setSelectedType(kettle.logicType_id || '');
 
                             const configs: Record<string, any> = {};
 
-                            Object.keys(sensor.config || {}).forEach((key) => {
-                              configs[`config.${key}`] = sensor.config[key];
+                            Object.keys(kettle.config || {}).forEach((key) => {
+                              configs[`config.${key}`] = kettle.config[key];
                             });
 
                             reset({
-                              ...sensor,
+                              ...kettle,
                               ...configs,
                             });
-
-                            setEditMode(true);
+                            setIsEditMode(true);
                           }}
                         >
                           Edit
                         </Button>
-                        &nbsp; */}
+                        &nbsp;
                         {/* <Button type="button" size="sm" color="danger">
                           Delete
                         </Button> */}
@@ -172,15 +203,15 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
           id={modal_id}
           headerTitle={
             isEditMode
-              ? t('interpolation.update-thing', { type: t('sensors.name') })
+              ? t('interpolation.update-thing', { type: t('kettles.name') })
               : t('interpolation.new-thing', {
-                  type: t('sensors.name'),
+                  type: t('kettles.name'),
                 })
           }
           footer={{
             button: {
               type: 'submit',
-              text: isEditMode ? 'Edit' : 'Create',
+              text: isEditMode ? 'Update' : 'Create',
             },
           }}
         >
@@ -197,18 +228,56 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
 
           <SelectBox
             part={{
-              id: 'type_id',
-              name: t('sensors.type'),
-              isRequired: true,
-              selectBoxValues: sensorTypes.map((at) => {
+              id: 'sensor_id',
+              name: t('sensors.name'),
+              isRequired: false,
+              selectBoxValues: sensors.map((s) => {
                 return {
-                  id: at.type,
-                  name: at.type,
+                  id: s.id,
+                  name: s.name,
+                };
+              }),
+              type: 'select-box',
+            }}
+            register={register}
+            errors={errors}
+          />
+
+          <SelectBox
+            part={{
+              id: 'heater_id',
+              name: t('heaters.name'),
+              isRequired: false,
+              selectBoxValues: actors.map((s) => {
+                return {
+                  id: s.id,
+                  name: s.name,
+                };
+              }),
+              type: 'select-box',
+            }}
+            register={register}
+            errors={errors}
+          />
+
+          <SelectBox
+            part={{
+              id: 'logicType_id',
+              name: t('logics.type'),
+              isRequired: false,
+              selectBoxValues: logicTypes.map((s) => {
+                return {
+                  id: s.type,
+                  name: s.type,
                 };
               }),
               type: 'select-box',
               onChange: (e) => {
                 setSelectedType(e.target.value);
+
+                reset({
+                  config: undefined,
+                });
               },
             }}
             register={register}
@@ -222,7 +291,7 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
           ) : (
             <>
               {t('interpolation.select-type-message', {
-                type: t('sensors.type'),
+                type: t('logics.type'),
               })}
             </>
           )}
@@ -233,18 +302,22 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
 };
 
 export const getServerSideProps = async ({ locale }: { locale: string }) => {
-  const [sensorTypes, sensors] = await Promise.all([
-    fetch(`${BASE_URL}/api/sensor-types`).then((data) => data.json()),
+  const [actors, sensors, kettles, logicTypes] = await Promise.all([
+    fetch(`${BASE_URL}/api/actors`).then((data) => data.json()),
     fetch(`${BASE_URL}/api/sensors`).then((data) => data.json()),
+    fetch(`${BASE_URL}/api/kettles`).then((data) => data.json()),
+    fetch(`${BASE_URL}/api/logic-types`).then((data) => data.json()),
   ]);
 
   return {
     props: {
       ...(await serverSideTranslations(locale, localeConfig.namespaces)),
-      sensorTypes,
+      actors,
       sensors,
+      kettles,
+      logicTypes,
     },
   };
 };
 
-export default EquipmentActor;
+export default EquipmentKettles;

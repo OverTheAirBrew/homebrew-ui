@@ -7,6 +7,7 @@ interface IIconButtonProps {
   className?: string;
   'data-toggle'?: string;
   'data-target'?: string;
+  onClick?: () => void;
 }
 
 const IconButton: FC<IIconButtonProps> = ({
@@ -14,6 +15,7 @@ const IconButton: FC<IIconButtonProps> = ({
   className,
   'data-target': dataTarget,
   'data-toggle': dataToggle,
+  onClick,
 }) => {
   return (
     <button
@@ -21,6 +23,7 @@ const IconButton: FC<IIconButtonProps> = ({
       className={`btn ${className}`}
       data-target={dataTarget}
       data-toggle={dataToggle}
+      onClick={onClick}
     >
       <FontAwesomeIcon icon={icon} />
     </button>

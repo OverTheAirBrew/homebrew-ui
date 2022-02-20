@@ -1,7 +1,8 @@
-import { IconName } from '@fortawesome/fontawesome-common-types';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
+import styled from 'styled-components';
 import { RequireOnlyOne } from '../../lib/require-one-of';
 import MenuItemGroup from './menu-items/group';
 import LinkItem from './menu-items/link-item';
@@ -13,8 +14,18 @@ interface ItemType {
     external?: boolean;
   };
   group: boolean;
-  icon?: IconName;
+  icon?: IconProp;
 }
+
+const BrandImage = styled.img`
+  float: left;
+  line-height: 0.8;
+  margin-left: 0.8rem;
+  margin-right: 0.9rem;
+  margin-top: -3px;
+  max-height: 33px;
+  max-width: 33px;
+`;
 
 export type MenuItemType = RequireOnlyOne<ItemType, 'link' | 'group'>;
 
@@ -29,11 +40,7 @@ const Sidebar: FC<ISidebarProps> = ({ menuItems }) => {
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
       <Link href="#">
         <a className="brand-link">
-          <img
-            src="/OTA_Logo_SocialCircle.svg"
-            className="brand-image img-circle elevation-3"
-            alt="logo"
-          />
+          <BrandImage src="/OTA_Logo_SocialCircle.svg" alt="logo" />
 
           <span className="brand-text font-weight-light">
             Over The Air Brew

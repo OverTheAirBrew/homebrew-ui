@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from 'react';
+import { isDesktop } from './is-desktop';
 
 const AppContext = createContext({
   sidebar: {
@@ -8,7 +9,7 @@ const AppContext = createContext({
 });
 
 export function AppWrapper({ children }: { children: any }) {
-  const [showSidebar, setSidebar] = useState(true);
+  const [showSidebar, setSidebar] = useState(isDesktop());
 
   const toggleSidebar = () => {
     setSidebar(!showSidebar);

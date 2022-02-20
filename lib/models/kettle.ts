@@ -4,7 +4,9 @@ export interface IKettle {
   id: string;
   name: string;
   sensor_id: string;
-  heater_id: String;
+  heater_id: string;
+  logicType_id: string;
+  config: any;
 }
 
-interface ILogicType extends IType {}
+export interface ILogicType extends IType {}

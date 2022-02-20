@@ -16,19 +16,11 @@ interface IModalProps {
       text: string;
     };
   };
-
-  onClose: () => void;
 }
 
-const Modal: FC<IModalProps> = ({
-  id,
-  headerTitle,
-  onClose,
-  children,
-  footer,
-}) => {
+const Modal: FC<IModalProps> = ({ id, headerTitle, children, footer }) => {
   return (
-    <ModalWrapper id={id} color="default" size="lg" onClose={onClose}>
+    <ModalWrapper id={id} color="default" size="lg">
       <ModalHeader title={headerTitle} />
       <ModalBody>{children}</ModalBody>
       <ModalFooter>

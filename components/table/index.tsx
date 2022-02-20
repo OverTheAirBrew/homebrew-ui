@@ -1,24 +1,16 @@
 import { FC } from 'react';
 
 interface ITableProps {
-  responsive?: boolean;
+  striped?: boolean;
   children?: any[];
 }
 
-const Table: FC<ITableProps> = ({ children, responsive }) => {
+const Table: FC<ITableProps> = ({ children, striped }) => {
   const classNames: string[] = ['table'];
 
-  if (responsive) classNames.push('table-responsive');
+  if (striped) classNames.push('table-striped');
 
   return <table className={classNames.join(' ')}>{children}</table>;
 };
-
-// Table.propTypes = {
-//   children: PropTypes.oneOf([
-//     PropTypes.shape({
-//       type: PropTypes.oneOf([TableHead]),
-//     }),
-//   ]),
-// };
 
 export default Table;

@@ -17,7 +17,7 @@ export interface IFormPart {
   type: FormPartType;
   isRequired: boolean;
   name: string;
-  selectBoxValues?: { id: string; name: string }[];
+  selectBoxValues?: { id: string | number; name: string | number }[];
   onChange?: (value: any) => void;
 }
 
@@ -25,15 +25,18 @@ export interface IFormPartProps {
   part: IFormPart;
   register: UseFormRegister<FieldValues>;
   errors: Record<string, any>;
+  partName?: string;
 }
 
 export function generateFormFromType(
   type: IType,
   form: { register: UseFormRegister<FieldValues>; errors: Record<string, any> },
+  idPrefix: string = '',
 ) {
   return type.properties.map((p) => {
     return (
       <FormPart
+        key={p.id}
         part={{
           ...p,
           selectBoxValues: p.selectBoxValues?.map((s) => {
@@ -42,15 +45,25 @@ export function generateFormFromType(
         }}
         register={form.register}
         errors={form.errors}
+        partName={idPrefix}
       />
     );
   });
 }
 
-const FormPart: FC<IFormPartProps> = ({ part, register, errors }) => {
+const FormPart: FC<IFormPartProps> = ({ part, register, errors, partName }) => {
   if (typeof FormParts[part.type] !== undefined) {
+    const fullPartName = [partName, part.id].filter((p) => !!p).join('.');
+
     const Component = FormParts[part.type];
-    return <Component part={part} register={register} errors={errors} />;
+    return (
+      <Component
+        part={part}
+        register={register}
+        errors={errors}
+        partName={fullPartName}
+      />
+    );
   }
 
   return <div>Unknown Component</div>;

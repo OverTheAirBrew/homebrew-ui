@@ -1,5 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC } from 'react';
+import { useAppContext } from '../../../lib/context';
+import { isDesktop } from '../../../lib/is-desktop';
 import Link from '../../link';
 import { MenuItemType } from '../sidebar';
 
@@ -9,6 +11,8 @@ interface ILinkItemProps {
 }
 
 const LinkItem: FC<ILinkItemProps> = ({ item, currentPath }) => {
+  const { sidebar } = useAppContext();
+
   const linkClassName = `nav-link ${
     currentPath === item.link?.href ? 'active' : ''
   }`;
@@ -19,6 +23,7 @@ const LinkItem: FC<ILinkItemProps> = ({ item, currentPath }) => {
         <a
           className={linkClassName}
           target={item.link?.external ? '_blank' : ''}
+          onClick={() => (!isDesktop() ? sidebar.toggle() : undefined)}
         >
           {item.icon ? (
             <FontAwesomeIcon

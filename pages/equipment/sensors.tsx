@@ -36,23 +36,39 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isDirty, touchedFields },
+    reset,
   } = useForm();
 
-  const onModalClose = () => {};
-
   const onFormSubmit = async (data: any) => {
-    const { name, type_id, ...config } = data;
+    if (!isEditMode) {
+      const { name, type_id, ...config } = data;
 
-    await fetch(`${BASE_URL}/api/sensors`, {
-      method: 'POST',
-      body: JSON.stringify({
-        name,
-        type_id,
-        config,
-      }),
-      headers: { 'content-type': 'application/json' },
-    });
+      await fetch(`${BASE_URL}/api/sensors`, {
+        method: 'POST',
+        body: JSON.stringify({
+          name,
+          type_id,
+          config,
+        }),
+        headers: { 'content-type': 'application/json' },
+      });
+    } else if (isDirty) {
+      const updateObj: Record<string, any> = {};
+
+      const { id } = data;
+
+      for (const key of Object.keys(touchedFields)) {
+        const value = data[key];
+        updateObj[key] = value;
+      }
+
+      await fetch(`${BASE_URL}/api/sensors/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(updateObj),
+        headers: { 'content-type': 'application/json' },
+      });
+    }
 
     hideModal(modal_id);
     await refreshSensors();
@@ -67,12 +83,13 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
 
   const [selectedType, setSelectedType] = useState<string>();
   const [userSensors, setUserSensors] = useState(sensors);
+  const [isEditMode, setEditMode] = useState(false);
 
   const generateTypesList = () => {
     const type = sensorTypes.find((st) => st.type === selectedType);
 
     if (type) {
-      return generateFormFromType(type, { register, errors });
+      return generateFormFromType(type, { register, errors }, 'config');
     }
 
     return <></>;
@@ -112,28 +129,34 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
                       <TableBodyCell>0</TableBodyCell>
                       <TableBodyCell>
                         {/* <Button
-                      type="button"
-                      size="sm"
-                      color="info"
-                      data-target={`#${modal_id}`}
-                      data-toggle="modal"
-                      onClick={() => {
-                        setSelectedSensorType(value.type_id);
-                        setEditMode(true);
-                        form.reset({
-                          id: value.id,
-                          name: value.name,
-                          sensorType: value.type_id,
-                          ...value.config,
-                        });
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    &nbsp;
-                    <Button type="button" size="sm" color="danger">
-                      Delete
-                    </Button> */}
+                          type="button"
+                          size="sm"
+                          color="info"
+                          data-target={`#${modal_id}`}
+                          data-toggle="modal"
+                          onClick={() => {
+                            setSelectedType(sensor.type_id);
+
+                            const configs: Record<string, any> = {};
+
+                            Object.keys(sensor.config || {}).forEach((key) => {
+                              configs[`config.${key}`] = sensor.config[key];
+                            });
+
+                            reset({
+                              ...sensor,
+                              ...configs,
+                            });
+
+                            setEditMode(true);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        &nbsp; */}
+                        {/* <Button type="button" size="sm" color="danger">
+                          Delete
+                        </Button> */}
                       </TableBodyCell>
                     </TableRow>
                   );
@@ -147,16 +170,19 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <Modal
           id={modal_id}
-          headerTitle={t('interpolation.new-thing', {
-            type: t('sensors.name'),
-          })}
+          headerTitle={
+            isEditMode
+              ? t('interpolation.update-thing', { type: t('sensors.name') })
+              : t('interpolation.new-thing', {
+                  type: t('sensors.name'),
+                })
+          }
           footer={{
             button: {
               type: 'submit',
-              text: 'Create',
+              text: isEditMode ? 'Edit' : 'Create',
             },
           }}
-          onClose={onModalClose}
         >
           <Input
             part={{

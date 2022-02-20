@@ -7,16 +7,25 @@ const SelectBox: FC<IFormPartProps> = ({
   part: { id, name, isRequired, onChange, selectBoxValues },
   register,
   errors,
+  partName,
 }) => {
   const { t } = useTranslation();
 
   const requiredMessage = isRequired ? isRequiredMessage(t, name) : false;
 
+  if (!selectBoxValues) {
+    throw new Error('No selectbox values');
+  }
+
   return (
     <div className="form-group">
       <label htmlFor={id}>{t(name)}</label>
+
       <select
-        {...register(id, { required: requiredMessage })}
+        {...register(partName || id, {
+          required: requiredMessage,
+          valueAsNumber: typeof selectBoxValues[0]?.id === 'number',
+        })}
         className="custom-select"
         defaultValue="select"
         onChange={onChange}

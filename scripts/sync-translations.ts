@@ -18,7 +18,7 @@ Promise.resolve()
     }
 
     await outputFile(
-      join(__dirname, 'locale-config.json'),
+      join(__dirname, '..', 'locale-config.json'),
       JSON.stringify({
         locales: data.locales,
         namespaces: data.namespaces,

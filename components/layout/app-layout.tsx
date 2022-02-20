@@ -2,7 +2,7 @@
 // const {Item} = Sidebar
 
 import { brands, solid } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useAppContext } from '../../lib/context';
 import Footer from './footer';
 import NavbarMain from './navbar';
@@ -108,12 +108,23 @@ interface IAppLayoutProps {}
 const AppLayout: FC<IAppLayoutProps> = ({ children }) => {
   const { sidebar } = useAppContext();
 
+  const [classes, setClasses] = useState('');
+
+  useEffect(() => {
+    const currentClasses = ['sidebar-mini', 'layout-fixed'];
+
+    if (sidebar.show) {
+      currentClasses.push('sidebar-open');
+    } else {
+      currentClasses.push('sidebar-collapse');
+      currentClasses.push('sidebar-closed');
+    }
+
+    setClasses(currentClasses.join(' '));
+  }, [sidebar.show]);
+
   return (
-    <div
-      className={`sidebar-mini layout-fixed ${
-        sidebar.show ? '' : 'sidebar-collapse'
-      }`}
-    >
+    <div className={classes}>
       <NavbarMain />
       <Sidebar menuItems={menuItems} />
       <Page>{children}</Page>

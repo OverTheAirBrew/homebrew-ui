@@ -1,7 +1,14 @@
 import { FC } from 'react';
 
-const CardBody: FC = ({ children }) => {
-  return <div className="card-body">{children}</div>;
+const CardBody: FC<{ tableResponsive?: boolean }> = ({
+  children,
+  ...options
+}) => {
+  const classNames = ['card-body'];
+
+  if (options.tableResponsive) classNames.push('table-responsive');
+
+  return <div className={classNames.join(' ')}>{children}</div>;
 };
 
 export default CardBody;

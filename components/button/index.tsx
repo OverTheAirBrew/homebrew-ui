@@ -13,6 +13,7 @@ interface IButtonProps {
   outline?: boolean;
   disabled?: boolean;
   block?: boolean;
+  isIcon?: boolean;
 
   type: 'button' | 'submit' | 'reset';
 
@@ -30,6 +31,7 @@ const Button: FC<IButtonProps> = ({
   outline,
   disabled,
   block,
+  isIcon,
   'data-target': dataTarget,
   'data-toggle': dataToggle,
   'data-dismiss': dataDismiss,
@@ -44,6 +46,7 @@ const Button: FC<IButtonProps> = ({
     if (outline) classNames.push('btn-outline');
     if (disabled) classNames.push('disabled');
     if (block) classNames.push('btn-block');
+    if (isIcon) classNames.push('btn-icon');
 
     classNames.push(className || '');
 

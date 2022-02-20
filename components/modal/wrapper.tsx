@@ -1,5 +1,4 @@
-import $ from 'jquery';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 
 interface IModalProps {
   id: string;
@@ -12,22 +11,9 @@ interface IModalProps {
     | 'danger'
     | 'warning';
   size?: 'xl' | 'lg' | 'sm';
-  onClose?: () => void;
 }
 
-const ModalWrapper: FC<IModalProps> = ({
-  color,
-  id,
-  size,
-  children,
-  onClose,
-}) => {
-  useEffect(() => {
-    $(`#${id}`).on('hide.bs.modal', () => {
-      if (typeof onClose !== 'undefined') onClose();
-    });
-  }, []);
-
+const ModalWrapper: FC<IModalProps> = ({ color, id, size, children }) => {
   return (
     <div className="modal fade" id={id}>
       <div className={`modal-dialog ${size ? `modal-${size}` : ''}`}>

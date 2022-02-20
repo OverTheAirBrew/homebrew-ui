@@ -6,6 +6,7 @@ jobs:
     environment:
       HUSKY: '0'
       CI: 'true'
+      NODE_ENV: 'production'
     steps:
       - checkout
       - run:

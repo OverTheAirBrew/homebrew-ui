@@ -1,8 +1,8 @@
-import type { NextPage } from "next";
-import Col from "../components/layout/grid/col";
-import Row from "../components/layout/grid/row";
-import PageContent from "../components/layout/page/content";
-import PageHeader from "../components/layout/page/header";
+import type { NextPage } from 'next';
+import Col from '../../components/layout/grid/col';
+import Row from '../../components/layout/grid/row';
+import PageContent from '../../components/layout/page/content';
+import PageHeader from '../../components/layout/page/header';
 
 const Home: NextPage = () => {
   return (

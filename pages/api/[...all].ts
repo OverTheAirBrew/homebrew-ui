@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import httpProxyMiddleware from 'next-http-proxy-middleware';
 
-export default (req: NextApiRequest, res: NextApiResponse) =>
+const allApiRoute = (req: NextApiRequest, res: NextApiResponse) =>
   httpProxyMiddleware(req, res, {
     // You can use the `http-proxy` option
     target: 'http://localhost:9090',
@@ -13,3 +13,5 @@ export default (req: NextApiRequest, res: NextApiResponse) =>
       },
     ],
   });
+
+export default allApiRoute;

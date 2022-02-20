@@ -71,11 +71,11 @@ const AddModal: FC<IAddModalProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const onClose = () => {
-    reset();
-    selectedType.set(undefined);
-    editMode.set(false);
-  };
+  // const onClose = () => {
+  //   reset();
+  //   selectedType.set(undefined);
+  //   editMode.set(false);
+  // };
 
   const onFormSubmit = handleSubmit(async (data) => {
     onSubmit(data);
@@ -130,7 +130,7 @@ const AddModal: FC<IAddModalProps> = ({
         <CardBody>{children}</CardBody>
       </Card>
 
-      <ModalWrapper id={modal.id} color="default" size="lg" onClose={onClose}>
+      <ModalWrapper id={modal.id} color="default" size="lg">
         <form onSubmit={onFormSubmit}>
           <input hidden {...register('id')} />
 

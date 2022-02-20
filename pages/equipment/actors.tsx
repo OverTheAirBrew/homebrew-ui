@@ -40,10 +40,10 @@ const EquipmentActors: FC<IEquipmentActorProps> = ({ actors, actorTypes }) => {
     reset,
   } = useForm();
 
-  const onModalClose = () => {
-    reset();
-    setSelectedType(undefined);
-  };
+  // const onModalClose = () => {
+  //   reset();
+  //   setSelectedType(undefined);
+  // };
 
   const onFormSubmit = async (data: any) => {
     const { name, type_id, ...config } = data;
@@ -78,6 +78,7 @@ const EquipmentActors: FC<IEquipmentActorProps> = ({ actors, actorTypes }) => {
     return type?.properties.map((p) => {
       return (
         <FormPart
+          key={p.id}
           part={{
             ...p,
             selectBoxValues: p.selectBoxValues?.map((s) => {
@@ -167,7 +168,6 @@ const EquipmentActors: FC<IEquipmentActorProps> = ({ actors, actorTypes }) => {
               text: 'Create',
             },
           }}
-          onClose={onModalClose}
         >
           <Input
             part={{

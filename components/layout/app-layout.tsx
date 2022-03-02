@@ -75,6 +75,13 @@ const menuItems: MenuItemType[] = [
     },
   },
   {
+    title: 'Graphs',
+    icon: solid('chart-area'),
+    link: {
+      href: '/admin/graphs',
+    },
+  },
+  {
     title: 'Help',
     group: true,
   },

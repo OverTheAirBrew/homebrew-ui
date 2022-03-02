@@ -4,10 +4,12 @@ import { FC, useEffect, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { useAppContext } from '../lib/context';
+import IconButton from './button/icon';
 import Card from './card';
 import CardBody from './card/body';
 import CardFooter from './card/footer';
 import CardHeader from './card/header';
+import CardTool from './card/tools';
 import Col from './layout/grid/col';
 import Row from './layout/grid/row';
 
@@ -15,7 +17,7 @@ const TemperatureContainer = styled.div`
   text-align: center;
 
   h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 
   h2 {
@@ -23,9 +25,24 @@ const TemperatureContainer = styled.div`
   }
 `;
 
-const Pid: FC = () => {
+const NoPaddingCol = styled(Col)`
+  padding: 0;
+  margin: 0;
+`;
+
+const messageListener = (channel: string, handler: (data: any) => void) => {
   const { socket } = useAppContext();
 
+  useEffect(() => {
+    socket.on(channel, handler);
+
+    return () => {
+      socket.off(channel, handler);
+    };
+  }, []);
+};
+
+const Pid: FC<{ kettle: any }> = ({ kettle }) => {
   const [temperature, setTemperature] = useState(0);
   const [targetTemperature, setTargetTemp] = useState(0);
 
@@ -40,32 +57,36 @@ const Pid: FC = () => {
   };
 
   const handleTempUpdate = (data: { sensor_id: string; value: number }) => {
-    if (data.sensor_id === '50666a5d-3bd3-4432-878d-db6eeac8d875') {
+    if (data.sensor_id === kettle.sensor_id) {
       setTemperature(data.value);
     }
   };
 
-  useEffect(() => {
-    socket.on('sensors.sensor.reading', handleTempUpdate);
-
-    return () => {
-      socket.off('sensors.sensor.reading', handleTempUpdate);
-    };
-  }, []);
+  if (kettle.sensor_id) {
+    messageListener('sensors.sensor.reading', handleTempUpdate);
+  }
 
   return (
     <Card>
-      <CardHeader title="Kettle 1" />
+      <CardHeader title={kettle.name}>
+        <CardTool>
+          <IconButton className="btn-tool" icon={solid('edit')} />
+        </CardTool>
+      </CardHeader>
       <CardBody>
         <Row verticalAlign="align-items-center">
-          <Col breakPoint={{ lg: 10 }}>
+          <Col breakPoint={{ md: 10, sm: 12 }}>
             <TemperatureContainer>
               <Row>
                 <Col>Temp</Col>
               </Row>
               <Row>
                 <Col>
-                  <h1>{temperature} &deg;c</h1>
+                  {kettle.sensor_id ? (
+                    <h1>{temperature} &deg;c</h1>
+                  ) : (
+                    <h1>No Sensor</h1>
+                  )}
                 </Col>
               </Row>
               <Row>
@@ -78,10 +99,10 @@ const Pid: FC = () => {
               </Row>
             </TemperatureContainer>
           </Col>
-          <Col>
-            <div className="btn-group-vertical">
+          <NoPaddingCol breakPoint={{ md: 2 }}>
+            <div className="btn-group-vertical btn-block">
               <button
-                className="btn btn-default btn-lg btn-flat"
+                className="btn btn-default btn-md btn-flat"
                 onMouseDown={() => updateTargetTemp('positive')}
                 data-tip
                 data-for="target_temp_up"
@@ -97,7 +118,7 @@ const Pid: FC = () => {
                 Raise Target Temperature
               </ReactTooltip>
               <button
-                className="btn btn-default btn-lg btn-flat"
+                className="btn btn-default btn-md btn-flat"
                 onMouseDown={() => updateTargetTemp('negative')}
                 data-tip
                 data-for="target_temp_down"
@@ -113,7 +134,7 @@ const Pid: FC = () => {
                 Lower Target Temperature
               </ReactTooltip>
             </div>
-          </Col>
+          </NoPaddingCol>
         </Row>
       </CardBody>
       <CardFooter>
@@ -122,6 +143,7 @@ const Pid: FC = () => {
             className="btn btn-default btn-lg btn-flat"
             data-tip
             data-for="auto"
+            disabled={!kettle.logicType_id}
           >
             <FontAwesomeIcon icon={solid('sync')} />
           </button>
@@ -137,6 +159,7 @@ const Pid: FC = () => {
             className="btn btn-default btn-lg btn-flat"
             data-tip
             data-for="toggle_heater"
+            disabled={!kettle.heater_id}
           >
             <FontAwesomeIcon icon={solid('fire')} />
           </button>
@@ -152,6 +175,7 @@ const Pid: FC = () => {
             className="btn btn-default btn-lg btn-flat"
             data-tip
             data-for="toggle_agitator"
+            disabled={!kettle.agitator_id}
           >
             <FontAwesomeIcon icon={solid('utensil-spoon')} />
           </button>

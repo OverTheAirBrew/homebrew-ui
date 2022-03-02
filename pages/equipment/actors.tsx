@@ -8,7 +8,7 @@ import Card from '../../components/card';
 import CardBody from '../../components/card/body';
 import CardHeader from '../../components/card/header';
 import CardTool from '../../components/card/tools';
-import FormPart from '../../components/forms';
+import { generateFormFromType } from '../../components/forms';
 import Input from '../../components/forms/input';
 import SelectBox from '../../components/forms/select-box';
 import PageContent from '../../components/layout/page/content';
@@ -72,24 +72,14 @@ const EquipmentActors: FC<IEquipmentActorProps> = ({ actors, actorTypes }) => {
   const [selectedType, setSelectedType] = useState<string>();
   const [userActors, setUserActors] = useState(actors);
 
-  const generateSensorTypeList = () => {
+  const generateTypeList = () => {
     const type = actorTypes.find((at) => at.type === selectedType);
 
-    return type?.properties.map((p) => {
-      return (
-        <FormPart
-          key={p.id}
-          part={{
-            ...p,
-            selectBoxValues: p.selectBoxValues?.map((s) => {
-              return { id: s, name: s };
-            }),
-          }}
-          register={register}
-          errors={errors}
-        />
-      );
-    });
+    if (type) {
+      return generateFormFromType(type, { register, errors }, 'config');
+    }
+
+    return <></>;
   };
 
   return (
@@ -100,6 +90,7 @@ const EquipmentActors: FC<IEquipmentActorProps> = ({ actors, actorTypes }) => {
           <CardHeader>
             <CardTool>
               <IconButton
+                data-testing="add-create-actor"
                 className="btn-tool"
                 icon={solid('plus')}
                 data-target={`#${modal_id}`}
@@ -120,7 +111,10 @@ const EquipmentActors: FC<IEquipmentActorProps> = ({ actors, actorTypes }) => {
               <TableBody>
                 {userActors.map((actor) => {
                   return (
-                    <TableRow key={actor.name}>
+                    <TableRow
+                      key={actor.name}
+                      data-testing={`actor-${actor.name}`}
+                    >
                       <TableBodyCell>{actor.name}</TableBodyCell>
                       <TableBodyCell>{actor.type_id}</TableBodyCell>
                       <TableBodyCell>0</TableBodyCell>
@@ -178,6 +172,7 @@ const EquipmentActors: FC<IEquipmentActorProps> = ({ actors, actorTypes }) => {
             }}
             register={register}
             errors={errors}
+            data-testing="modal-name"
           />
 
           <SelectBox
@@ -198,12 +193,13 @@ const EquipmentActors: FC<IEquipmentActorProps> = ({ actors, actorTypes }) => {
             }}
             register={register}
             errors={errors}
+            data-testing="modal-type"
           />
 
           <hr />
 
           {selectedType ? (
-            <>{generateSensorTypeList()}</>
+            <>{generateTypeList()}</>
           ) : (
             <>
               {t('interpolation.select-type-message', {

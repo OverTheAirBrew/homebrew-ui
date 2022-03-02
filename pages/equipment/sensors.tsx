@@ -103,6 +103,7 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
           <CardHeader>
             <CardTool>
               <IconButton
+                data-testing="add-create-sensor"
                 className="btn-tool"
                 icon={solid('plus')}
                 data-target={`#${modal_id}`}
@@ -123,7 +124,10 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
               <TableBody>
                 {userSensors.map((sensor) => {
                   return (
-                    <TableRow key={sensor.name}>
+                    <TableRow
+                      key={sensor.name}
+                      data-testing={`sensor-${sensor.name}`}
+                    >
                       <TableBodyCell>{sensor.name}</TableBodyCell>
                       <TableBodyCell>{sensor.type_id}</TableBodyCell>
                       <TableBodyCell>0</TableBodyCell>
@@ -193,6 +197,7 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
             }}
             register={register}
             errors={errors}
+            data-testing="modal-name"
           />
 
           <SelectBox
@@ -213,6 +218,7 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
             }}
             register={register}
             errors={errors}
+            data-testing="modal-type"
           />
 
           <hr />

@@ -30,6 +30,7 @@ const Modal: FC<IModalProps> = ({ id, headerTitle, children, footer }) => {
             type={footer.button.type}
             size="sm"
             className="float-right"
+            data-testing="modal-submit"
           >
             {footer.button.text}
           </Button>

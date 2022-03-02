@@ -8,6 +8,7 @@ const Input: FC<IFormPartProps> = ({
   register,
   errors,
   partName,
+  ...rest
 }) => {
   const { t } = useTranslation();
 
@@ -23,6 +24,7 @@ const Input: FC<IFormPartProps> = ({
           required: requiredMessage,
           valueAsNumber: type === 'number',
         })}
+        {...rest}
       />
       <ErrorMessage>{errors[id]?.message}</ErrorMessage>
     </div>

@@ -39,6 +39,7 @@ const Button: FC<IButtonProps> = ({
   className,
   children,
   onClick,
+  ...rest
 }) => {
   function generateClassName() {
     const classNames: string[] = ['btn', `btn-${color}`, `btn-${size}`];
@@ -61,6 +62,7 @@ const Button: FC<IButtonProps> = ({
       data-target={dataTarget}
       data-dismiss={dataDismiss}
       type={type ? type : 'button'}
+      {...rest}
     >
       {children}
     </button>

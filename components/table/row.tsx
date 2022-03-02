@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-const TableRow: FC = ({ children }) => {
-  return <tr>{children}</tr>;
+const TableRow: FC = ({ children, ...rest }) => {
+  return <tr {...rest}>{children}</tr>;
 };
 
 export default TableRow;

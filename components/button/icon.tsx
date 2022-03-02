@@ -16,6 +16,7 @@ const IconButton: FC<IIconButtonProps> = ({
   'data-target': dataTarget,
   'data-toggle': dataToggle,
   onClick,
+  ...rest
 }) => {
   return (
     <button
@@ -24,6 +25,7 @@ const IconButton: FC<IIconButtonProps> = ({
       data-target={dataTarget}
       data-toggle={dataToggle}
       onClick={onClick}
+      {...rest}
     >
       <FontAwesomeIcon icon={icon} />
     </button>

@@ -8,6 +8,7 @@ const SelectBox: FC<IFormPartProps> = ({
   register,
   errors,
   partName,
+  ...rest
 }) => {
   const { t } = useTranslation();
 
@@ -29,13 +30,18 @@ const SelectBox: FC<IFormPartProps> = ({
         className="custom-select"
         defaultValue="select"
         onChange={onChange}
+        {...rest}
       >
         <option key="select" value="">
           Please select...
         </option>
         {selectBoxValues.map((o) => {
           return (
-            <option key={o.id} value={o.id}>
+            <option
+              key={o.id}
+              value={o.id}
+              data-testing={`select-box-option-${o.id}`}
+            >
               {o.name}
             </option>
           );

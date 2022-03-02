@@ -46,12 +46,19 @@ export function generateFormFromType(
         register={form.register}
         errors={form.errors}
         partName={idPrefix}
+        data-testing={`${p.type}-${p.id}`}
       />
     );
   });
 }
 
-const FormPart: FC<IFormPartProps> = ({ part, register, errors, partName }) => {
+const FormPart: FC<IFormPartProps> = ({
+  part,
+  register,
+  errors,
+  partName,
+  ...rest
+}) => {
   if (typeof FormParts[part.type] !== undefined) {
     const fullPartName = [partName, part.id].filter((p) => !!p).join('.');
 
@@ -62,6 +69,7 @@ const FormPart: FC<IFormPartProps> = ({ part, register, errors, partName }) => {
         register={register}
         errors={errors}
         partName={fullPartName}
+        {...rest}
       />
     );
   }

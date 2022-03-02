@@ -42,7 +42,7 @@ const EquipmentActor: FC<IEquipmentActorProps> = ({ sensors, sensorTypes }) => {
 
   const onFormSubmit = async (data: any) => {
     if (!isEditMode) {
-      const { name, type_id, ...config } = data;
+      const { name, type_id, config } = data;
 
       await fetch(`${BASE_URL}/api/sensors`, {
         method: 'POST',

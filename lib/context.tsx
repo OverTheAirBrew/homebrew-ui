@@ -1,11 +1,15 @@
 import { createContext, useContext, useState } from 'react';
+import { connect } from 'socket.io-client';
 import { isDesktop } from './is-desktop';
+
+const socket = connect('http://localhost:9090');
 
 const AppContext = createContext({
   sidebar: {
     show: true,
     toggle: () => {},
   },
+  socket,
 });
 
 export function AppWrapper({ children }: { children: any }) {
@@ -20,6 +24,7 @@ export function AppWrapper({ children }: { children: any }) {
       show: showSidebar,
       toggle: toggleSidebar,
     },
+    socket,
   };
 
   return (

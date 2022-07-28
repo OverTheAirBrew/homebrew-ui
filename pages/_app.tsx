@@ -1,21 +1,26 @@
-import AppLayout from '../components/layout';
+import { appWithTranslation } from '@overtheairbrew/next-i18next';
+import { AppProps } from 'next/app';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import AppLayout from '../components/layout/app-layout';
+import { AppWrapper } from '../lib/context';
+import '../styles/globals.scss';
+const nextI18NextConfig = require('../next-i18next.config');
 
-function OtaApp({Component, pageProps}: {Component: any, pageProps: any}) {
-  // return <Component {...pageProps} />
+function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
 
-  const theme: {value: 'dark' | 'cosmic' | 'corporate'} = {
-    value: 'dark'
-  }
-
-  const breweryName = {
-    value: 'Over The Air Brew Co'
-  }
+  useEffect(() => {
+    import('bootstrap/dist/js/bootstrap.js' as any);
+  }, []);
 
   return (
-    <AppLayout theme={theme?.value} breweryName={breweryName?.value}>
-      <Component  {...pageProps} />
-    </AppLayout>
-  )
+    <AppWrapper>
+      <AppLayout>
+        <Component {...pageProps} />
+      </AppLayout>
+    </AppWrapper>
+  );
 }
 
-export default OtaApp
+export default appWithTranslation(MyApp, nextI18NextConfig);

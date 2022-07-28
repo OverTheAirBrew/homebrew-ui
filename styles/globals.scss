@@ -1,0 +1,10 @@
+$enable-deprecation-messages: false;
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/bootstrap";
+@import "~admin-lte/build/scss/_adminlte.raw.scss";
+
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+}
